@@ -87,6 +87,7 @@ tr:last-child td{border-bottom:0}
 .history-item strong{font-size:13px}
 .history-scores{text-align:right;line-height:1.7}
 .pill{display:inline-block;background:var(--panel2);color:var(--muted);padding:5px 8px;border-radius:8px;font-size:10px;white-space:nowrap}
+.pill.gold-pill{background:#3b2d16;color:var(--gold);border:1px solid #5a4827}
 .note{font-size:11px;color:var(--muted);text-align:center;line-height:1.5;margin:20px 8px}
 .hidden{display:none!important}
 .toast{
@@ -115,6 +116,12 @@ tr:last-child td{border-bottom:0}
 .winner-box strong{display:block;font-size:24px;margin-top:5px}
 .winner-actions{display:grid;gap:9px;margin-top:18px}
 .winner-actions .btn{padding:14px}
+
+.game-archive-card{background:#101216;border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:9px}
+.game-archive-header{display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.game-archive-details{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.win-badge{display:inline-flex;align-items:center;gap:4px;background:#3b2d16;color:var(--gold);border:1px solid #5a4827;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700}
+
 @media(min-width:560px){
  .app{padding:26px 24px 40px}
  .hero h2{font-size:38px}
@@ -161,6 +168,17 @@ tr:last-child td{border-bottom:0}
   <div class="section-head"><h3>Schon einmal mitgespielt?</h3></div>
   <div id="savedRoster" class="saved-roster"></div>
   <div id="emptyRoster" class="sub">Hier erscheinen Namen aus früheren Spielen.</div>
+ </section>
+
+ <!-- VERGANGENE SPIELE & SIEGE -->
+ <section class="section">
+  <div class="section-head">
+   <h3>Ewige Siegstatistik & Historie</h3>
+   <span class="sub" id="historyGamesCount">0 Spiele</span>
+  </div>
+  <div id="hallOfFame" style="margin-bottom:12px;display:flex;flex-wrap:wrap;gap:6px"></div>
+  <div id="gameHistoryList"></div>
+  <button class="btn small ghost hidden" id="clearHistoryBtn" style="margin-top:10px">Verlauf leeren</button>
  </section>
 
  <div class="start-actions">
@@ -263,6 +281,7 @@ tr:last-child td{border-bottom:0}
 
 const KEY='rummikub-score-v2';
 const ROSTER_KEY='rummikub-score-roster-v1';
+const HISTORY_KEY='rummikub-score-games-v1';
 const $=id=>document.getElementById(id);
 
 function freshState(number){
@@ -287,6 +306,17 @@ function loadState(){
   }
  }catch(e){}
  return freshState(1);
+}
+
+function loadGameHistory(){
+ try{
+  const h=JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]');
+  return Array.isArray(h)?h:[];
+ }catch(e){return []}
+}
+
+function saveGameHistory(history){
+ localStorage.setItem(HISTORY_KEY,JSON.stringify(history));
 }
 
 let state=loadState();
@@ -370,6 +400,76 @@ function renderStart(){
  $('emptyRoster').classList.toggle('hidden',available.length>0);
  $('savedRoster').querySelectorAll('[data-name]').forEach(b=>b.onclick=()=>{$('playerName').value=b.dataset.name;
   addPlayer();
+ });
+
+ renderGameHistory();
+}
+
+function renderGameHistory(){
+ const history=loadGameHistory();
+ $('historyGamesCount').textContent=`${history.length} ${history.length===1?'Spiel':'Spiele'}`;
+ const clearBtn=$('clearHistoryBtn');
+ if(clearBtn) clearBtn.classList.toggle('hidden',history.length===0);
+
+ if(!history.length){
+  $('hallOfFame').innerHTML='';$('gameHistoryList').innerHTML='<div class="empty">Noch keine beendeten Spiele gespeichert.</div>';
+  return;
+ }
+
+ const winCounts={};
+ history.forEach(g=>{
+  if(g.winnerName){
+   winCounts[g.winnerName]=(winCounts[g.winnerName]||0)+1;
+  }
+ });
+
+ const winEntries=Object.entries(winCounts).sort((a,b)=>b[1]-a[1]);
+ $('hallOfFame').innerHTML=winEntries.map(([name,count])=>`
+  <div class="win-badge">🏆 ${esc(name)}: ${count}× Gewinner</div>
+ `).join('');
+
+ $('gameHistoryList').innerHTML=history.map((g,idx)=>`
+  <div class="game-archive-card">
+   <div class="game-archive-header" data-toggle-archive="${idx}">
+    <div>
+     <strong>Spiel #${g.gameNumber||(history.length-idx)} · Sieger: <span class="gold">${esc(g.winnerName)}</span></strong>
+     <div class="sub">${new Date(g.endedAt).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'})} Uhr · ${g.roundsCount} Runden</div>
+    </div>
+    <span class="pill">Details ▾</span>
+   </div>
+   <div class="game-archive-details hidden" id="archive-details-${idx}">
+    <div style="margin-bottom:8px;" class="sub">Endplatzierungen:</div>
+    ${(g.standings||[]).map((s,i)=>`
+     <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
+      <span>${i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}.`} ${esc(s.name)}</span>
+      <strong>${s.total>0?'+':''}${s.total} Punkte</strong>
+     </div>
+    `).join('')}
+    <button class="btn small danger ghost" style="margin-top:10px" data-delete-archive="${idx}">Spiel aus Verlauf löschen</button>
+   </div>
+  </div>
+ `).join('');
+
+ $('gameHistoryList').querySelectorAll('[data-toggle-archive]').forEach(el=>{
+  el.onclick=()=>{
+   const idx=el.dataset.toggleArchive;
+   $(`archive-details-${idx}`).classList.toggle('hidden');
+  };
+ });
+
+ $('gameHistoryList').querySelectorAll('[data-delete-archive]').forEach(btn=>{
+  btn.onclick=(e)=>{
+   e.stopPropagation();
+   const idx=Number(btn.dataset.deleteArchive);
+   confirmAction('Spiel aus Verlauf löschen?','Möchtest du dieses abgelaufene Spiel wirklich löschen?','Löschen',()=>{
+    const h=loadGameHistory();
+    h.splice(idx,1);
+    saveGameHistory(h);
+    closeModal();
+    renderGameHistory();
+    toast('Spiel gelöscht');
+   });
+  };
  });
 }
 
@@ -540,6 +640,19 @@ function showWinner(){
 }
 
 function finishGame(){
+ const sorted=totals();
+ const winner=sorted[0];
+ 
+ const history=loadGameHistory();
+ history.unshift({
+  gameNumber:state.gameNumber||1,
+  endedAt:new Date().toISOString(),
+  winnerName:winner?winner.name:'Unbekannt',
+  roundsCount:state.rounds.length,
+  standings:sorted.map(p=>({name:p.name,total:p.total}))
+ });
+ saveGameHistory(history);
+
  const next=Number(state.gameNumber||1)+1;
  state=freshState(next);
  editingRound=-1;
@@ -547,16 +660,17 @@ function finishGame(){
  $('winnerScreen').classList.add('hidden');
  closeModal();
  showStart();
- toast('Spiel beendet. Ihr könnt eine neue Partie vorbereiten.');
+ toast('Spiel im Verlauf gespeichert & neues Spiel vorbereitet.');
 }
 
 function exportBackup(){
  const blob=new Blob([JSON.stringify({
   format:'RummikubScoreBackup',
-  version:2,
+  version:3,
   exportedAt:new Date().toISOString(),
   state,
-  roster:roster()
+  roster:roster(),
+  gameHistory:loadGameHistory()
  },null,2)],{type:'application/json'});
  const url=URL.createObjectURL(blob);
  const a=document.createElement('a');
@@ -579,6 +693,7 @@ function importBackup(file){
     state=s;
     if(!state.draftScores)state.draftScores={};
     if(Array.isArray(data.roster))localStorage.setItem(ROSTER_KEY,JSON.stringify(data.roster));
+    if(Array.isArray(data.gameHistory))saveGameHistory(data.gameHistory);
     state.started=state.started||state.rounds.length>0;
     persist();
     closeModal();
@@ -588,6 +703,18 @@ function importBackup(file){
   }catch(e){toast('Diese Sicherungsdatei ist ungültig.');}
  };
  reader.readAsText(file);
+}
+
+const clearHistoryBtn = $('clearHistoryBtn');
+if (clearHistoryBtn) {
+ clearHistoryBtn.onclick=()=>{
+  confirmAction('Gesamte Historie leeren?','Möchtest du wirklich alle aufgezeichneten vergangenen Spiele löschen?','Historie löschen',()=>{
+   saveGameHistory([]);
+   closeModal();
+   renderGameHistory();
+   toast('Spielverlauf gelöscht');
+  });
+ };
 }
 
 $('addPlayerBtn').onclick=addPlayer;
@@ -625,7 +752,7 @@ $('continueBtn').onclick=()=>{
  toast('Ihr könnt weiterspielen');
 };
 $('finishBtn').onclick=()=>{
- confirmAction('Spiel endgültig beenden?','Der aktuelle Spielstand wird durch ein neues Spiel ersetzt. Wenn du ihn behalten möchtest, exportiere zuerst eine Sicherung.','Spiel beenden',finishGame);
+ confirmAction('Spiel endgültig beenden?','Der aktuelle Spielstand wird abgeschlossen, im Verlauf gespeichert und für ein neues Spiel zurückgesetzt.','Spiel beenden',finishGame);
 };
 
 $('exportBtn').onclick=exportBackup;
