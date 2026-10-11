@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0b0c0f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Rummikub Score">
+<title>Rummikub Score</title>
+<style>
+:root{
+ color-scheme:dark;
+ --bg:#0b0c0f;
+ --panel:#15171c;
+ --panel2:#1c1f26;
+ --line:#2b2f38;
+ --text:#f5f6f8;
+ --muted:#969ca8;
+ --gold:#dfba70;
+ --green:#8bd5a4;
+ --red:#f08d8d
+}
+*{box-sizing:border-box}
+html,body{
+ margin:0;min-height:100%;background:var(--bg);color:var(--text);
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
+}
+body{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+button,input{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.35;cursor:not-allowed}
+.app{max-width:680px;margin:auto;padding:18px 15px 35px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:24px}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{
+ width:43px;height:43px;border-radius:14px;display:grid;place-items:center;
+ background:linear-gradient(145deg,#f1d99b,#b88a3f);
+ color:#17130b;font-size:22px;font-weight:900
+}
+.eyebrow{font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+.brand h1{font-size:19px;margin:3px 0 0;letter-spacing:-.5px}
+.status{font-size:11px;color:var(--muted);border:1px solid var(--line);padding:7px 9px;border-radius:99px;white-space:nowrap}
+.hero{margin-bottom:22px}
+.hero h2{font-size:32px;line-height:1.08;letter-spacing:-1.2px;margin:8px 0}
+.hero p{font-size:14px;line-height:1.5;color:var(--muted);margin:0}
+.section{background:var(--panel);border:1px solid var(--line);border-radius:19px;padding:16px;margin:13px 0}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.section h3{font-size:15px;margin:0}
+.sub{font-size:11px;color:var(--muted)}
+.input{width:100%;min-width:0;background:#0e1014;border:1px solid var(--line);border-radius:11px;color:var(--text);padding:13px;font-size:15px}
+.add-row{display:flex;gap:8px}
+.add-row .input{flex:1}
+.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:12px;padding:12px 14px;font-size:13px;font-weight:650}
+.btn.primary{background:var(--gold);color:#17130b;border-color:var(--gold)}
+.btn.ghost{background:transparent}
+.btn.danger{color:var(--red)}
+.btn.small{padding:8px 10px;font-size:12px}
+.btn-row{display:flex;flex-wrap:wrap;gap:8px}
+.full{width:100%}
+.player-list{display:grid;gap:8px;margin-top:13px}
+.player-card{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;background:#101216;border:1px solid var(--line);border-radius:12px}
+.player-card strong{font-size:14px;overflow-wrap:anywhere}
+.player-card button{background:transparent;color:var(--muted);border:0;font-size:20px;padding:2px 5px}
+.saved-roster{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.roster-btn{background:#101216;border:1px solid var(--line);color:var(--text);border-radius:99px;padding:8px 10px;font-size:12px}
+.help{font-size:11px;line-height:1.5;color:var(--muted);margin:12px 0 0}
+.start-actions{display:grid;gap:9px;margin-top:18px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:18px 0}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:12px 10px;min-width:0}
+.stat label{font-size:10px;color:var(--muted);display:block;line-height:1.4}
+.stat strong{font-size:22px;display:block;margin-top:5px;letter-spacing:-.6px;overflow-wrap:anywhere}
+.score-grid{display:grid;gap:9px}
+.score-row{display:grid;grid-template-columns:minmax(0,1fr) 112px;align-items:center;gap:10px;padding:10px;background:#101216;border:1px solid var(--line);border-radius:13px}
+.player-name{font-size:13px;font-weight:650;overflow-wrap:anywhere}
+.score-input{width:100%;min-width:0;background:#1b1e24;border:1px solid #30343d;border-radius:10px;color:var(--text);padding:11px 8px;text-align:right;font-size:17px;font-variant-numeric:tabular-nums}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;color:var(--muted);font-weight:550;padding:10px 7px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:12px 7px;border-bottom:1px solid #24272e;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}
+.total{font-size:14px;font-weight:750}
+.gold{color:var(--gold)}
+.empty{font-size:13px;line-height:1.5;color:var(--muted);padding:12px 2px}
+.history-item{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);font-size:12px}
+.history-item:last-child{border-bottom:0}
+.history-item strong{font-size:13px}
+.history-scores{text-align:right;line-height:1.7}
+.pill{display:inline-block;background:var(--panel2);color:var(--muted);padding:5px 8px;border-radius:8px;font-size:10px;white-space:nowrap}
+.note{font-size:11px;color:var(--muted);text-align:center;line-height:1.5;margin:20px 8px}
+.hidden{display:none!important}
+.toast{
+ position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));
+ transform:translateX(-50%);background:#f3f3f3;color:#111;
+ padding:11px 15px;border-radius:99px;font-size:12px;font-weight:700;
+ z-index:50;white-space:nowrap;box-shadow:0 8px 30px #0007
+}
+.modal{position:fixed;inset:0;z-index:20;background:#000b;backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:22px}
+.modal-card{width:100%;max-width:420px;background:#17191f;border:1px solid #373b44;border-radius:23px;padding:23px}
+.modal-card h2{font-size:23px;margin:0 0 8px}
+.modal-card p{font-size:13px;line-height:1.5;color:var(--muted);margin:0 0 18px}
+.winner-screen{
+ position:fixed;inset:0;z-index:30;overflow:auto;
+ background:radial-gradient(ellipse at 50% 20%,#3b2d16 0%,#17140f 36%,#08090c 78%);
+ display:flex;align-items:center;justify-content:center;text-align:center;
+ padding:30px 22px env(safe-area-inset-bottom)
+}
+.winner-inner{width:100%;max-width:440px}
+.trophy{font-size:78px;filter:drop-shadow(0 12px 30px #d9b56d45)}
+.winner-kicker{color:var(--gold);letter-spacing:3px;text-transform:uppercase;font-size:11px;font-weight:800;margin:16px 0}
+.winner-title{font-size:40px;line-height:1.03;letter-spacing:-1.6px;margin:0}
+.winner-name{font-size:29px;font-weight:850;color:var(--gold);margin:15px 0;overflow-wrap:anywhere}
+.winner-box{border:1px solid #5a4827;background:#ffffff08;border-radius:17px;padding:15px;margin:20px 0}
+.winner-box span{font-size:11px;color:var(--muted)}
+.winner-box strong{display:block;font-size:24px;margin-top:5px}
+.winner-actions{display:grid;gap:9px;margin-top:18px}
+.winner-actions .btn{padding:14px}
+@media(min-width:560px){
+ .app{padding:26px 24px 40px}
+ .hero h2{font-size:38px}
+ .stats{gap:12px}
+ .stat{padding:15px}
+ .score-row{grid-template-columns:minmax(0,1fr) 130px}
+}
+</style>
+</head>
+<body>
+<main class="app" id="app">
+
+<header class="top">
+ <div class="brand">
+  <div class="logo">R</div>
+  <div><div class="eyebrow">Scorekeeper</div><h1>Rummikub <span style="font-weight:400;color:var(--muted)">Score</span></h1></div>
+ </div>
+ <div class="status" id="saveStatus">● Gespeichert</div>
+</header>
+
+<!-- STARTSEITE -->
+<section id="startView">
+ <div class="hero">
+  <div class="eyebrow">SPIELVORBEREITUNG</div>
+  <h2 id="startHeadline">Wer spielt mit?</h2>
+  <p>Lege eure Mitspieler fest. Sobald ihr bereit seid, beginnt die Punktewertung.</p>
+ </div>
+
+ <section class="section">
+  <div class="section-head">
+   <h3>Mitspieler hinzufügen</h3>
+   <span class="sub">Beliebig viele</span>
+  </div>
+  <div class="add-row">
+   <input id="playerName" class="input" maxlength="28" placeholder="Name eingeben" autocomplete="off">
+   <button class="btn primary" id="addPlayerBtn">Hinzufügen</button>
+  </div>
+  <div id="playerList" class="player-list"></div>
+  <div id="emptyPlayers" class="empty">Noch keine Spieler eingetragen.</div>
+  <div class="help">Du kannst Spieler vor dem Start entfernen. Namen werden für spätere Spiele gemerkt.</div>
+ </section>
+
+ <section class="section">
+  <div class="section-head"><h3>Schon einmal mitgespielt?</h3></div>
+  <div id="savedRoster" class="saved-roster"></div>
+  <div id="emptyRoster" class="sub">Hier erscheinen Namen aus früheren Spielen.</div>
+ </section>
+
+ <div class="start-actions">
+  <button class="btn primary full" id="startGameBtn">Spiel beginnen →</button>
+  <button class="btn full" id="resumeGameBtn">Laufendes Spiel fortsetzen</button>
+  <button class="btn ghost full" id="importBtn">Sicherung importieren</button>
+  <button class="btn ghost full" id="exportBtn">Spielstand sichern / exportieren</button>
+  <input id="importFile" type="file" accept="application/json,.json" class="hidden">
+ </div>
+ <p class="note">Spielstände werden automatisch auf diesem Gerät gespeichert.</p>
+</section>
+
+<!-- SPIELANSICHT -->
+<section id="gameView" class="hidden">
+ <div class="hero">
+  <div class="eyebrow" id="gameEyebrow">LAUFENDES SPIEL</div>
+  <h2 id="gameHeadline">Runde 1</h2>
+  <p id="gameSubheadline">Punkte eintragen und Runde speichern.</p>
+ </div>
+
+ <div class="btn-row" style="margin-bottom:14px">
+  <button class="btn ghost" id="managePlayersBtn">＋ Spieler verwalten</button>
+  <button class="btn ghost" id="gameExportBtn">Sicherung exportieren</button>
+ </div>
+
+ <div class="stats">
+  <div class="stat"><label>Gespielte Runden</label><strong id="roundCount">0</strong></div>
+  <div class="stat"><label>Mitspieler</label><strong id="playerCount">0</strong></div>
+  <div class="stat"><label>Führender Punktestand</label><strong id="leaderScore">—</strong></div>
+ </div>
+
+ <section class="section" id="roundSection">
+  <div class="section-head">
+   <div><h3 id="roundTitle">Punkte dieser Runde</h3><div class="sub" id="roundSub" style="margin-top:5px">Für jeden Spieler Punkte eintragen</div></div>
+   <span class="pill" id="roundPill">RUNDE 1</span>
+  </div>
+  <div id="scoreInputs" class="score-grid"></div>
+  <div class="help">Tragt die Punkte entsprechend eurer Spielregel ein. Positive und negative Werte sind möglich. Wer später hinzukommt, wird nur ab der Einstiegsrunde gewertet.</div>
+  <div id="editingNote" class="help hidden" style="color:var(--gold);margin-bottom:10px">Du bearbeitest eine bereits gespeicherte Runde.</div>
+  <div class="btn-row" style="margin-top:14px">
+   <button class="btn primary" id="saveRoundBtn">Runde speichern</button>
+   <button class="btn ghost" id="clearRoundBtn">Eingaben leeren</button>
+   <button class="btn ghost hidden" id="cancelEditBtn">Abbrechen</button>
+  </div>
+ </section>
+
+ <section class="section">
+  <div class="section-head"><h3>Aktuelle Rangliste</h3><span class="sub">Gesamtpunkte</span></div>
+  <div id="leaderboard" class="empty">Noch keine Punkte eingetragen.</div>
+ </section>
+
+ <section class="section">
+  <div class="section-head"><h3>Rundenverlauf</h3><span class="sub" id="historyCount">0 Runden</span></div>
+  <div id="history"><div class="empty">Noch keine Runde gespeichert.</div></div>
+  <div class="btn-row" style="margin-top:13px">
+   <button class="btn small ghost" id="undoBtn">Letzte Runde zurücknehmen</button>
+  </div>
+ </section>
+
+ <section class="section">
+  <div class="section-head"><h3>Spielabschluss</h3></div>
+  <p class="help" style="margin-top:0">Wenn ihr fertig seid, zeigt die App den Sieger und die Endplatzierungen an.</p>
+  <button class="btn primary full" id="winnerBtn">🏆 Spiel beenden und Sieger anzeigen</button>
+ </section>
+ <p class="note">Die Punkte werden laufend auf diesem Gerät gespeichert.</p>
+</section>
+</main>
+
+<div class="modal hidden" id="modal">
+ <div class="modal-card">
+  <h2 id="modalTitle">Bestätigen</h2>
+  <p id="modalText"></p>
+  <div class="btn-row">
+   <button class="btn" id="modalCancel">Abbrechen</button>
+   <button class="btn primary" id="modalConfirm">Bestätigen</button>
+  </div>
+ </div>
+</div>
+
+<div class="winner-screen hidden" id="winnerScreen">
+ <div class="winner-inner">
+  <div class="trophy">🏆</div>
+  <div class="winner-kicker">Spiel abgeschlossen</div>
+  <h2 class="winner-title">Der absolute<br>Gewinner</h2>
+  <div class="winner-name" id="winnerName">—</div>
+  <div id="winnerScore" class="sub"></div>
+  <div class="winner-box"><span>Gespielte Runden</span><strong id="winnerRounds">0</strong></div>
+  <div id="winnerStandings"></div>
+  <div class="winner-actions">
+   <button class="btn primary" id="continueBtn">Doch weiterspielen</button>
+   <button class="btn" id="finishBtn">Spiel endgültig beenden</button>
+  </div>
+ </div>
+</div>
+<div id="toast" class="toast hidden"></div>
+
+<script>
+(function(){
+'use strict';
+
+const KEY='rummikub-score-v2';
+const ROSTER_KEY='rummikub-score-roster-v1';
+const $=id=>document.getElementById(id);
+
+function freshState(number){
+ return {
+  players:[],
+  rounds:[],
+  gameNumber:number||1,
+  gameStarted:new Date().toISOString(),
+  finished:false,
+  started:false,
+  draftScores:{}
+ };
+}
+
+function loadState(){
+ try{
+  const s=JSON.parse(localStorage.getItem(KEY));
+  if(s&&Array.isArray(s.players)&&Array.isArray(s.rounds)){
+   if(!s.draftScores)s.draftScores={};
+   if(typeof s.started!=='boolean')s.started=s.rounds.length>0;
+   return s;
+  }
+ }catch(e){}
+ return freshState(1);
+}
+
+let state=loadState();
+let editingRound=-1;
+let pendingAction=null;
+let toastTimer=null;
+
+function roster(){
+ try{
+  const r=JSON.parse(localStorage.getItem(ROSTER_KEY)||'[]');
+  return Array.isArray(r)?r:[];
+ }catch(e){return []}
+}
+
+function rememberName(name){
+ const r=roster();
+ if(!r.some(n=>n.toLowerCase()===name.toLowerCase())){
+  r.push(name);
+  localStorage.setItem(ROSTER_KEY,JSON.stringify(r));
+ }
+}
+
+function persist(){
+ try{
+  localStorage.setItem(KEY,JSON.stringify(state));
+  $('saveStatus').textContent='● Gespeichert';
+ }catch(e){
+  $('saveStatus').textContent='● Speicherfehler';
+  toast('Speichern fehlgeschlagen. Bitte exportiere eine Sicherung.');
+ }
+}
+
+function esc(s){
+ return String(s).replace(/[&<>"']/g,c=>({
+  '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+ }[c]));
+}
+
+function toast(message){
+ $('toast').textContent=message;
+ $('toast').classList.remove('hidden');
+ clearTimeout(toastTimer);
+ toastTimer=setTimeout(()=>$('toast').classList.add('hidden'),2400);
+}
+
+function totals(){
+ return state.players.map(p=>{
+  const rounds=state.rounds.filter(r=>Object.prototype.hasOwnProperty.call(r.scores,p.id));
+  return {
+   ...p,
+   total:rounds.reduce((sum,r)=>sum+(Number(r.scores[p.id])||0),0),
+   played:rounds.length
+  };
+ }).sort((a,b)=>a.total-b.total);
+}
+
+function showStart(){
+ $('startView').classList.remove('hidden');$('gameView').classList.add('hidden');
+ renderStart();
+}
+
+function showGame(){
+ $('startView').classList.add('hidden');$('gameView').classList.remove('hidden');
+ renderGame();
+}
+
+function renderStart(){
+ $('startHeadline').textContent=state.started?'Spiel verwalten':'Wer spielt mit?';
+ $('startGameBtn').textContent=state.started?'Zur laufenden Partie zurück →':'Spiel beginnen →';
+ $('resumeGameBtn').classList.toggle('hidden',!state.started);$('playerList').innerHTML=state.players.map(p=>
+  `<div class="player-card"><strong>${esc(p.name)}${p.joinedAtRound>1?` <span class="sub">(ab Runde ${p.joinedAtRound})</span>`:''}</strong>
+  <button type="button" data-remove="${p.id}" aria-label="Spieler entfernen" ${state.rounds.length?'disabled':''}>×</button></div>`
+ ).join('');
+ $('emptyPlayers').classList.toggle('hidden',state.players.length>0);$('playerList').querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{
+  if(state.rounds.length)return toast('Nach Spielbeginn können Spieler nicht entfernt werden.');
+  state.players=state.players.filter(p=>p.id!==b.dataset.remove);
+  persist();renderStart();
+ });
+ const available=roster().filter(n=>!state.players.some(p=>p.name.toLowerCase()===n.toLowerCase()));
+ $('savedRoster').innerHTML=available.map(n=>`<button class="roster-btn" data-name="${esc(n)}">＋ ${esc(n)}</button>`).join('');
+ $('emptyRoster').classList.toggle('hidden',available.length>0);
+ $('savedRoster').querySelectorAll('[data-name]').forEach(b=>b.onclick=()=>{$('playerName').value=b.dataset.name;
+  addPlayer();
+ });
+}
+
+function renderGame(){
+ const sorted=totals();
+ $('roundCount').textContent=state.rounds.length;
+ $('playerCount').textContent=state.players.length;
+ $('leaderScore').textContent=sorted.length?sorted[0].total:'—';
+ const nextRound=state.rounds.length+1;
+ $('gameEyebrow').textContent=`SPIEL ${state.gameNumber} · LAUFEND`;
+ $('gameHeadline').textContent=editingRound>=0?`Runde ${editingRound+1} bearbeiten`:`Runde ${nextRound}`;
+ $('gameSubheadline').textContent=editingRound>=0?'Korrigiere die gespeicherten Punkte.':'Tragt die Punkte ein und speichert die Runde.';
+ $('roundTitle').textContent=editingRound>=0?'Runde bearbeiten':'Punkte dieser Runde';$('roundSub').textContent=editingRound>=0?'Die Rangliste wird danach aktualisiert.':'Für jeden Spieler Punkte eintragen';
+ $('roundPill').textContent=`RUNDE ${editingRound>=0?editingRound+1:nextRound}`;
+ $('editingNote').classList.toggle('hidden',editingRound<0);
+ $('cancelEditBtn').classList.toggle('hidden',editingRound<0);$('saveRoundBtn').textContent=editingRound>=0?'Änderungen speichern':'Runde speichern';
+
+ $('scoreInputs').innerHTML=state.players.map(p=>{
+  const old=editingRound>=0?state.rounds[editingRound].scores[p.id]:undefined;
+  const draft=state.draftScores[p.id];
+  const value=old!==undefined?old:(draft!==undefined?draft:'');
+  const unavailable=editingRound>=0&&p.joinedAtRound>editingRound+1;
+  return `<label class="score-row">
+   <span class="player-name">${esc(p.name)}${p.joinedAtRound>1?`<div class="sub">Einstieg ab Runde ${p.joinedAtRound}</div>`:''}</span>
+   <input class="score-input" type="number" inputmode="decimal" step="1" data-score="${p.id}" value="${value}" placeholder="0" aria-label="Punkte für ${esc(p.name)}" ${unavailable?'disabled':''}>
+  </label>`;
+ }).join('')||'<div class="empty">Gehe zurück zur Spielverwaltung und füge mindestens zwei Spieler hinzu.</div>';
+
+ $('scoreInputs').querySelectorAll('[data-score]').forEach(input=>{
+  input.addEventListener('input',()=>{
+   state.draftScores[input.dataset.score]=input.value;
+   persist();
+  });
+ });
+
+ $('saveRoundBtn').disabled=state.players.length<2;
+ $('saveRoundBtn').style.opacity=$('saveRoundBtn').disabled?'.4':'1';
+
+ $('leaderboard').innerHTML=sorted.length?`
+  <div class="table-wrap"><table>
+  <thead><tr><th>#</th><th>Spieler</th><th>Runden</th><th>Gesamt</th></tr></thead>
+  <tbody>${sorted.map((p,i)=>`<tr>
+   <td>${i===0?'★':i+1}</td>
+   <td>${esc(p.name)}${p.joinedAtRound>1?`<div class="sub">ab Runde ${p.joinedAtRound}</div>`:''}</td>
+   <td>${p.played}</td>
+   <td class="total ${i===0?'gold':''}">${p.total>0?'+':''}${p.total}</td>
+  </tr>`).join('')}</tbody></table></div>`:
+  '<div class="empty">Noch keine Spieler vorhanden.</div>';
+
+ $('historyCount').textContent=`${state.rounds.length} ${state.rounds.length===1?'Runde':'Runden'}`;
+ $('history').innerHTML=state.rounds.length?[...state.rounds].map((r,i)=>({r,i})).reverse().map(({r,i})=>`
+  <div class="history-item">
+   <div>
+    <strong>Runde ${i+1}</strong>
+    <div class="sub" style="margin-top:4px">${new Date(r.date).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</div>
+    <button class="btn small ghost" style="margin-top:8px" data-edit="${i}">Bearbeiten</button>
+   </div>
+   <div class="history-scores">${state.players.map(p=>
+    Object.prototype.hasOwnProperty.call(r.scores,p.id)
+     ?`${esc(p.name)}: <b>${(Number(r.scores[p.id])\vert{}\vert{}0)>0?'+':''}${Number(r.scores[p.id])||0}</b>`
+     :`<span class="sub">${esc(p.name)}: noch nicht dabei</span>`
+   ).join('<br>')}</div>
+  </div>`).join(''):'<div class="empty">Noch keine Runde gespeichert.</div>';
+
+ $('history').querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>{
+  editingRound=Number(b.dataset.edit);
+  state.draftScores={};
+  persist();renderGame();
+  $('roundSection').scrollIntoView({behavior:'smooth',block:'start'});
+ });
+ $('undoBtn').disabled=!state.rounds.length;
+ $('undoBtn').style.opacity=$('undoBtn').disabled?'.4':'1';
+}
+
+function addPlayer(){
+ const name=$('playerName').value.trim();
+ if(!name)return toast('Bitte einen Namen eingeben.');
+ if(state.players.some(p=>p.name.toLowerCase()===name.toLowerCase()))return toast('Dieser Spieler ist bereits eingetragen.');
+ const joinedAtRound=state.rounds.length+1;
+ const id=(crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random()));
+ state.players.push({id,name,joinedAtRound});
+ state.draftScores[id]='';
+ rememberName(name);
+ $('playerName').value='';
+ persist();
+ renderStart();
+ toast(joinedAtRound>1?`${name} steigt ab Runde ${joinedAtRound} ein`:`${name} hinzugefügt`);
+}
+
+function startGame(){
+ if(state.players.length<2)return toast('Bitte mindestens zwei Spieler hinzufügen.');
+ state.started=true;
+ state.finished=false;
+ persist();
+ showGame();
+}
+
+function saveRound(){
+ if(state.players.length<2)return toast('Bitte mindestens zwei Spieler hinzufügen.');
+ const scores={};
+ document.querySelectorAll('[data-score]').forEach(input=>{
+  if(!input.disabled){
+   scores[input.dataset.score]=input.value.trim()===''?0:Number(input.value);
+  }
+ });
+ if(Object.values(scores).some(v=>!Number.isFinite(v)))return toast('Bitte gültige Punktzahlen eingeben.');
+ if(editingRound>=0){
+  const round=state.rounds[editingRound];
+  state.players.forEach(p=>{
+   if(p.joinedAtRound<=editingRound+1&&Object.prototype.hasOwnProperty.call(scores,p.id)){
+    round.scores[p.id]=scores[p.id];
+   }
+  });
+  round.editedAt=new Date().toISOString();
+  editingRound=-1;
+  toast('Runde korrigiert');
+ }else{
+  state.rounds.push({date:new Date().toISOString(),scores});
+  toast('Runde gespeichert');
+ }
+ state.draftScores={};
+ persist();
+ renderGame();
+}
+
+function clearInputs(){
+ document.querySelectorAll('[data-score]').forEach(i=>i.value='');
+ state.draftScores={};
+ persist();
+}
+
+function cancelEdit(){
+ editingRound=-1;
+ state.draftScores={};
+ persist();
+ renderGame();
+}
+
+function confirmAction(title,text,label,action){
+ $('modalTitle').textContent=title;
+ $('modalText').textContent=text;
+ $('modalConfirm').textContent=label;
+ pendingAction=action;
+ $('modal').classList.remove('hidden');
+}
+
+function closeModal(){
+ $('modal').classList.add('hidden');
+ pendingAction=null;
+}
+
+function showWinner(){
+ if(state.players.length<2)return toast('Es werden mindestens zwei Spieler benötigt.');
+ if(!state.rounds.length)return toast('Speichere zuerst mindestens eine Runde.');
+ const sorted=totals();
+ const winner=sorted[0];
+ $('winnerName').textContent=winner.name;
+ $('winnerScore').textContent=`${winner.total>0?'+':''}${winner.total} Gesamtpunkte`;
+ $('winnerRounds').textContent=state.rounds.length;
+ $('winnerStandings').innerHTML=sorted.map((p,i)=>`
+  <div class="history-item">
+   <div><strong>${i+1}. ${esc(p.name)}</strong><div class="sub">${p.played} gewertete Runden</div></div>
+   <strong>${p.total>0?'+':''}${p.total} Punkte</strong>
+  </div>`).join('');
+ state.finished=true;
+ persist();
+ $('winnerScreen').classList.remove('hidden');
+}
+
+function finishGame(){
+ const next=Number(state.gameNumber||1)+1;
+ state=freshState(next);
+ editingRound=-1;
+ persist();
+ $('winnerScreen').classList.add('hidden');
+ closeModal();
+ showStart();
+ toast('Spiel beendet. Ihr könnt eine neue Partie vorbereiten.');
+}
+
+function exportBackup(){
+ const blob=new Blob([JSON.stringify({
+  format:'RummikubScoreBackup',
+  version:2,
+  exportedAt:new Date().toISOString(),
+  state,
+  roster:roster()
+ },null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement('a');
+ a.href=url;
+ a.download=`rummikub-sicherung-${new Date().toISOString().slice(0,10)}.json`;
+ a.click();
+ setTimeout(()=>URL.revokeObjectURL(url),1500);
+ toast('Sicherung wird exportiert');
+}
+
+function importBackup(file){
+ if(!file)return;
+ const reader=new FileReader();
+ reader.onload=()=>{
+  try{
+   const data=JSON.parse(reader.result);
+   const s=data.state||data;
+   if(!Array.isArray(s.players)||!Array.isArray(s.rounds))throw new Error('invalid');
+   confirmAction('Sicherung importieren?','Der aktuelle Spielstand wird durch die Sicherung ersetzt.','Importieren',()=>{
+    state=s;
+    if(!state.draftScores)state.draftScores={};
+    if(Array.isArray(data.roster))localStorage.setItem(ROSTER_KEY,JSON.stringify(data.roster));
+    state.started=state.started||state.rounds.length>0;
+    persist();
+    closeModal();
+    if(state.started)showGame();else showStart();
+    toast('Sicherung importiert');
+   });
+  }catch(e){toast('Diese Sicherungsdatei ist ungültig.');}
+ };
+ reader.readAsText(file);
+}
+
+$('addPlayerBtn').onclick=addPlayer;
+$('playerName').addEventListener('keydown',e=>{if(e.key==='Enter')addPlayer();});
+$('startGameBtn').onclick=()=>{  if(state.started&&state.rounds.length){   showGame();  }else{   startGame();  } };$('resumeGameBtn').onclick=showGame;
+
+$('managePlayersBtn').onclick=()=>{
+ showStart();
+ toast('Spieler hinzufügen oder Spiel fortsetzen');
+};
+$('gameExportBtn').onclick=exportBackup;
+$('saveRoundBtn').onclick=saveRound;
+$('clearRoundBtn').onclick=clearInputs;
+$('cancelEditBtn').onclick=cancelEdit;
+
+$('undoBtn').onclick=()=>{
+ if(!state.rounds.length)return;
+ confirmAction('Letzte Runde zurücknehmen?','Die zuletzt gespeicherte Runde wird gelöscht und die Rangliste neu berechnet.','Runde löschen',()=>{
+  state.rounds.pop();
+  editingRound=-1;
+  state.draftScores={};
+  persist();
+  closeModal();
+  renderGame();
+  toast('Letzte Runde entfernt');
+ });
+};
+
+$('winnerBtn').onclick=showWinner;
+$('continueBtn').onclick=()=>{
+ state.finished=false;
+ persist();
+ $('winnerScreen').classList.add('hidden');
+ showGame();
+ toast('Ihr könnt weiterspielen');
+};
+$('finishBtn').onclick=()=>{
+ confirmAction('Spiel endgültig beenden?','Der aktuelle Spielstand wird durch ein neues Spiel ersetzt. Wenn du ihn behalten möchtest, exportiere zuerst eine Sicherung.','Spiel beenden',finishGame);
+};
+
+$('exportBtn').onclick=exportBackup;
+$('importBtn').onclick=()=>$('importFile').click();
+$('importFile').onchange=e=>{  importBackup(e.target.files[0]);  e.target.value=''; };$('modalCancel').onclick=closeModal;
+$('modalConfirm').onclick=()=>{if(pendingAction)pendingAction();};
+
+if(state.started&&!state.finished)showGame();
+else showStart();
+
+})();
+</script>
+</body>
+</html>
