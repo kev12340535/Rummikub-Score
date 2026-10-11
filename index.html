@@ -87,7 +87,6 @@ tr:last-child td{border-bottom:0}
 .history-item strong{font-size:13px}
 .history-scores{text-align:right;line-height:1.7}
 .pill{display:inline-block;background:var(--panel2);color:var(--muted);padding:5px 8px;border-radius:8px;font-size:10px;white-space:nowrap}
-.pill.gold-pill{background:#3b2d16;color:var(--gold);border:1px solid #5a4827}
 .note{font-size:11px;color:var(--muted);text-align:center;line-height:1.5;margin:20px 8px}
 .hidden{display:none!important}
 .toast{
@@ -116,24 +115,14 @@ tr:last-child td{border-bottom:0}
 .winner-box strong{display:block;font-size:24px;margin-top:5px}
 .winner-actions{display:grid;gap:9px;margin-top:18px}
 .winner-actions .btn{padding:14px}
-
 .game-archive-card{background:#101216;border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:9px}
 .game-archive-header{display:flex;justify-content:space-between;align-items:center;cursor:pointer}
 .game-archive-details{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
 .win-badge{display:inline-flex;align-items:center;gap:4px;background:#3b2d16;color:var(--gold);border:1px solid #5a4827;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700}
-
-@media(min-width:560px){
- .app{padding:26px 24px 40px}
- .hero h2{font-size:38px}
- .stats{gap:12px}
- .stat{padding:15px}
- .score-row{grid-template-columns:minmax(0,1fr) 130px}
-}
 </style>
 </head>
 <body>
 <main class="app" id="app">
-
 <header class="top">
  <div class="brand">
   <div class="logo">R</div>
@@ -142,7 +131,6 @@ tr:last-child td{border-bottom:0}
  <div class="status" id="saveStatus">● Gespeichert</div>
 </header>
 
-<!-- STARTSEITE -->
 <section id="startView">
  <div class="hero">
   <div class="eyebrow">SPIELVORBEREITUNG</div>
@@ -157,11 +145,10 @@ tr:last-child td{border-bottom:0}
   </div>
   <div class="add-row">
    <input id="playerName" class="input" maxlength="28" placeholder="Name eingeben" autocomplete="off">
-   <button class="btn primary" id="addPlayerBtn" type="button">Hinzufügen</button>
+   <button class="btn primary" id="addPlayerBtn">Hinzufügen</button>
   </div>
   <div id="playerList" class="player-list"></div>
   <div id="emptyPlayers" class="empty">Noch keine Spieler eingetragen.</div>
-  <div class="help">Du kannst Spieler vor dem Start entfernen. Namen werden für spätere Spiele gemerkt.</div>
  </section>
 
  <section class="section">
@@ -170,7 +157,6 @@ tr:last-child td{border-bottom:0}
   <div id="emptyRoster" class="sub">Hier erscheinen Namen aus früheren Spielen.</div>
  </section>
 
- <!-- VERGANGENE SPIELE & SIEGE -->
  <section class="section">
   <div class="section-head">
    <h3>Ewige Siegstatistik & Historie</h3>
@@ -178,20 +164,18 @@ tr:last-child td{border-bottom:0}
   </div>
   <div id="hallOfFame" style="margin-bottom:12px;display:flex;flex-wrap:wrap;gap:6px"></div>
   <div id="gameHistoryList"></div>
-  <button class="btn small ghost hidden" id="clearHistoryBtn" type="button" style="margin-top:10px">Verlauf leeren</button>
+  <button class="btn small ghost hidden" id="clearHistoryBtn" style="margin-top:10px">Verlauf leeren</button>
  </section>
 
  <div class="start-actions">
-  <button class="btn primary full" id="startGameBtn" type="button">Spiel beginnen →</button>
-  <button class="btn full" id="resumeGameBtn" type="button">Laufendes Spiel fortsetzen</button>
-  <button class="btn ghost full" id="importBtn" type="button">Sicherung importieren</button>
-  <button class="btn ghost full" id="exportBtn" type="button">Spielstand sichern / exportieren</button>
+  <button class="btn primary full" id="startGameBtn">Spiel beginnen →</button>
+  <button class="btn full" id="resumeGameBtn">Laufendes Spiel fortsetzen</button>
+  <button class="btn ghost full" id="importBtn">Sicherung importieren</button>
+  <button class="btn ghost full" id="exportBtn">Spielstand sichern / exportieren</button>
   <input id="importFile" type="file" accept="application/json,.json" class="hidden">
  </div>
- <p class="note">Spielstände werden automatisch auf diesem Gerät gespeichert.</p>
 </section>
 
-<!-- SPIELANSICHT -->
 <section id="gameView" class="hidden">
  <div class="hero">
   <div class="eyebrow" id="gameEyebrow">LAUFENDES SPIEL</div>
@@ -200,8 +184,8 @@ tr:last-child td{border-bottom:0}
  </div>
 
  <div class="btn-row" style="margin-bottom:14px">
-  <button class="btn ghost" id="managePlayersBtn" type="button">＋ Spieler verwalten</button>
-  <button class="btn ghost" id="gameExportBtn" type="button">Sicherung exportieren</button>
+  <button class="btn ghost" id="managePlayersBtn">＋ Spieler verwalten</button>
+  <button class="btn ghost" id="gameExportBtn">Sicherung exportieren</button>
  </div>
 
  <div class="stats">
@@ -216,12 +200,11 @@ tr:last-child td{border-bottom:0}
    <span class="pill" id="roundPill">RUNDE 1</span>
   </div>
   <div id="scoreInputs" class="score-grid"></div>
-  <div class="help">Tragt die Punkte entsprechend eurer Spielregel ein. Positive und negative Werte sind möglich. Wer später hinzukommt, wird nur ab der Einstiegsrunde gewertet.</div>
   <div id="editingNote" class="help hidden" style="color:var(--gold);margin-bottom:10px">Du bearbeitest eine bereits gespeicherte Runde.</div>
   <div class="btn-row" style="margin-top:14px">
-   <button class="btn primary" id="saveRoundBtn" type="button">Runde speichern</button>
-   <button class="btn ghost" id="clearRoundBtn" type="button">Eingaben leeren</button>
-   <button class="btn ghost hidden" id="cancelEditBtn" type="button">Abbrechen</button>
+   <button class="btn primary" id="saveRoundBtn">Runde speichern</button>
+   <button class="btn ghost" id="clearRoundBtn">Eingaben leeren</button>
+   <button class="btn ghost hidden" id="cancelEditBtn">Abbrechen</button>
   </div>
  </section>
 
@@ -234,16 +217,14 @@ tr:last-child td{border-bottom:0}
   <div class="section-head"><h3>Rundenverlauf</h3><span class="sub" id="historyCount">0 Runden</span></div>
   <div id="history"><div class="empty">Noch keine Runde gespeichert.</div></div>
   <div class="btn-row" style="margin-top:13px">
-   <button class="btn small ghost" id="undoBtn" type="button">Letzte Runde zurücknehmen</button>
+   <button class="btn small ghost" id="undoBtn">Letzte Runde zurücknehmen</button>
   </div>
  </section>
 
  <section class="section">
   <div class="section-head"><h3>Spielabschluss</h3></div>
-  <p class="help" style="margin-top:0">Wenn ihr fertig seid, zeigt die App den Sieger und die Endplatzierungen an.</p>
-  <button class="btn primary full" id="winnerBtn" type="button">🏆 Spiel beenden und Sieger anzeigen</button>
+  <button class="btn primary full" id="winnerBtn">🏆 Spiel beenden und Sieger anzeigen</button>
  </section>
- <p class="note">Die Punkte werden laufend auf diesem Gerät gespeichert.</p>
 </section>
 </main>
 
@@ -252,8 +233,8 @@ tr:last-child td{border-bottom:0}
   <h2 id="modalTitle">Bestätigen</h2>
   <p id="modalText"></p>
   <div class="btn-row">
-   <button class="btn" id="modalCancel" type="button">Abbrechen</button>
-   <button class="btn primary" id="modalConfirm" type="button">Bestätigen</button>
+   <button class="btn" id="modalCancel">Abbrechen</button>
+   <button class="btn primary" id="modalConfirm">Bestätigen</button>
   </div>
  </div>
 </div>
@@ -268,619 +249,387 @@ tr:last-child td{border-bottom:0}
   <div class="winner-box"><span>Gespielte Runden</span><strong id="winnerRounds">0</strong></div>
   <div id="winnerStandings"></div>
   <div class="winner-actions">
-   <button class="btn primary" id="continueBtn" type="button">Doch weiterspielen</button>
-   <button class="btn" id="finishBtn" type="button">Spiel endgültig beenden</button>
+   <button class="btn primary" id="continueBtn">Doch weiterspielen</button>
+   <button class="btn" id="finishBtn">Spiel endgültig beenden</button>
   </div>
  </div>
 </div>
 <div id="toast" class="toast hidden"></div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function(){
-'use strict';
+const KEY = 'rummikub-score-v2';
+const ROSTER_KEY = 'rummikub-score-roster-v1';
+const HISTORY_KEY = 'rummikub-score-games-v1';
+const $ = id => document.getElementById(id);
 
-const KEY='rummikub-score-v2';
-const ROSTER_KEY='rummikub-score-roster-v1';
-const HISTORY_KEY='rummikub-score-games-v1';
-const $=id=>document.getElementById(id);
+let state = loadState();
+let editingRound = -1;
+let pendingAction = null;
+let toastTimer = null;
 
-function freshState(number){
- return {
-  players:[],
-  rounds:[],
-  gameNumber:number||1,
-  gameStarted:new Date().toISOString(),
-  finished:false,
-  started:false,
-  draftScores:{}
- };
-}
-
-function loadState(){
- try{
-  const s=JSON.parse(localStorage.getItem(KEY));
-  if(s&&Array.isArray(s.players)&&Array.isArray(s.rounds)){
-   if(!s.draftScores)s.draftScores={};
-   if(typeof s.started!=='boolean')s.started=s.rounds.length>0;
+function loadState() {
+ try {
+  const s = JSON.parse(localStorage.getItem(KEY));
+  if (s && Array.isArray(s.players) && Array.isArray(s.rounds)) {
+   if (!s.draftScores) s.draftScores = {};
+   if (typeof s.started !== 'boolean') s.started = s.rounds.length > 0;
    return s;
   }
- }catch(e){}
- return freshState(1);
+ } catch (e) {}
+ return { players: [], rounds: [], gameNumber: 1, finished: false, started: false, draftScores: {} };
 }
 
-function loadGameHistory(){
- try{
-  const h=JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]');
-  return Array.isArray(h)?h:[];
- }catch(e){return []}
+function loadGameHistory() {
+ try {
+  const h = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+  return Array.isArray(h) ? h : [];
+ } catch (e) { return []; }
 }
 
-function saveGameHistory(history){
- localStorage.setItem(HISTORY_KEY,JSON.stringify(history));
+function saveGameHistory(h) {
+ localStorage.setItem(HISTORY_KEY, JSON.stringify(h));
 }
 
-let state=loadState();
-let editingRound=-1;
-let pendingAction=null;
-let toastTimer=null;
-
-function roster(){
- try{
-  const r=JSON.parse(localStorage.getItem(ROSTER_KEY)||'[]');
-  return Array.isArray(r)?r:[];
- }catch(e){return []}
-}
-
-function rememberName(name){
- const r=roster();
- if(!r.some(n=>n.toLowerCase()===name.toLowerCase())){
-  r.push(name);
-  localStorage.setItem(ROSTER_KEY,JSON.stringify(r));
+function persist() {
+ try {
+  localStorage.setItem(KEY, JSON.stringify(state));
+  if ($('saveStatus'))$('saveStatus').textContent = '● Gespeichert';
+ } catch (e) {
+  if ($('saveStatus'))$('saveStatus').textContent = '● Speicherfehler';
+  toast('Speichern fehlgeschlagen.');
  }
 }
 
-function persist(){
- try{
-  localStorage.setItem(KEY,JSON.stringify(state));
-  if($('saveStatus'))$('saveStatus').textContent='● Gespeichert';
- }catch(e){
-  if($('saveStatus'))$('saveStatus').textContent='● Speicherfehler';
-  toast('Speichern fehlgeschlagen. Bitte exportiere eine Sicherung.');
- }
+function esc(s) {
+ return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
-function esc(s){
- return String(s).replace(/[&<>"']/g,c=>({
-  '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
- }[c]));
-}
-
-function toast(message){
- const t=$('toast');
- if(!t)return;
- t.textContent=message;
+function toast(msg) {
+ const t = $('toast');
+ if (!t) return;
+ t.textContent = msg;
  t.classList.remove('hidden');
  clearTimeout(toastTimer);
- toastTimer=setTimeout(()=>t.classList.add('hidden'),2400);
+ toastTimer = setTimeout(() => t.classList.add('hidden'), 2400);
 }
 
-function totals(){
- return state.players.map(p=>{
-  const rounds=state.rounds.filter(r=>Object.prototype.hasOwnProperty.call(r.scores,p.id));
+function totals() {
+ return state.players.map(p => {
+  const rounds = state.rounds.filter(r => Object.prototype.hasOwnProperty.call(r.scores, p.id));
   return {
    ...p,
-   total:rounds.reduce((sum,r)=>sum+(Number(r.scores[p.id])||0),0),
-   played:rounds.length
+   total: rounds.reduce((sum, r) => sum + (Number(r.scores[p.id]) || 0), 0),
+   played: rounds.length
   };
- }).sort((a,b)=>a.total-b.total);
+ }).sort((a, b) => a.total - b.total);
 }
 
-function showStart(){
- if($('startView'))$('startView').classList.remove('hidden');
- if($('gameView'))$('gameView').classList.add('hidden');
+function showStart() {
+ if ($('startView'))$('startView').classList.remove('hidden');
+ if ($('gameView'))$('gameView').classList.add('hidden');
  renderStart();
 }
 
-function showGame(){
- if($('startView'))$('startView').classList.add('hidden');
- if($('gameView'))$('gameView').classList.remove('hidden');
+function showGame() {
+ if ($('startView'))$('startView').classList.add('hidden');
+ if ($('gameView'))$('gameView').classList.remove('hidden');
  renderGame();
 }
 
-function renderStart(){
- if($('startHeadline'))$('startHeadline').textContent=state.started?'Spiel verwalten':'Wer spielt mit?';
- if($('startGameBtn'))$('startGameBtn').textContent=state.started?'Zur laufenden Partie zurück →':'Spiel beginnen →';
- if($('resumeGameBtn'))$('resumeGameBtn').classList.toggle('hidden',!state.started);
- 
- const playerList=$('playerList');
- if(playerList){
-  playerList.innerHTML=state.players.map(p=>
-   `<div class="player-card"><strong>${esc(p.name)}${p.joinedAtRound>1?` <span class="sub">(ab Runde ${p.joinedAtRound})</span>`:''}</strong>
-   <button type="button" data-remove="${p.id}" aria-label="Spieler entfernen" ${state.rounds.length?'disabled':''}>×</button></div>`
-  ).join('');
-  playerList.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{
-   if(state.rounds.length)return toast('Nach Spielbeginn können Spieler nicht entfernt werden.');
-   state.players=state.players.filter(p=>p.id!==b.dataset.remove);
-   persist();renderStart();
-  });
- }
- 
- if($('emptyPlayers'))$('emptyPlayers').classList.toggle('hidden',state.players.length>0);
+function roster() {
+ try {
+  const r = JSON.parse(localStorage.getItem(ROSTER_KEY) || '[]');
+  return Array.isArray(r) ? r : [];
+ } catch (e) { return []; }
+}
 
- const available=roster().filter(n=>!state.players.some(p=>p.name.toLowerCase()===n.toLowerCase()));
- const savedRoster=$('savedRoster');
- if(savedRoster){
-  savedRoster.innerHTML=available.map(n=>`<button class="roster-btn" type="button" data-name="${esc(n)}">＋ ${esc(n)}</button>`).join('');
-  savedRoster.querySelectorAll('[data-name]').forEach(b=>b.onclick=()=>{
-   if($('playerName'))$('playerName').value=b.dataset.name;
-   addPlayer();
+function rememberName(name) {
+ const r = roster();
+ if (!r.some(n => n.toLowerCase() === name.toLowerCase())) {
+  r.push(name);
+  localStorage.setItem(ROSTER_KEY, JSON.stringify(r));
+ }
+}
+
+function renderStart() {
+ if ($('startHeadline'))$('startHeadline').textContent = state.started ? 'Spiel verwalten' : 'Wer spielt mit?';
+ if ($('startGameBtn'))$('startGameBtn').textContent = state.started ? 'Zur laufenden Partie zurück →' : 'Spiel beginnen →';
+ if ($('resumeGameBtn'))$('resumeGameBtn').classList.toggle('hidden', !state.started);
+
+ const playerList = $('playerList');
+ if (playerList) {
+  playerList.innerHTML = state.players.map(p => `
+   <div class="player-card">
+    <strong>${esc(p.name)}${p.joinedAtRound > 1 ? ` <span class="sub">(ab Runde ${p.joinedAtRound})</span>` : ''}</strong>
+    <button type="button" data-remove="${p.id}" ${state.rounds.length ? 'disabled' : ''}>×</button>
+   </div>`).join('');
+  playerList.querySelectorAll('[data-remove]').forEach(b => {
+   b.onclick = () => {
+    if (state.rounds.length) return toast('Nach Spielbeginn nicht möglich.');
+    state.players = state.players.filter(p => p.id !== b.dataset.remove);
+    persist(); renderStart();
+   };
   });
  }
- if($('emptyRoster'))$('emptyRoster').classList.toggle('hidden',available.length>0);
+ if ($('emptyPlayers'))$('emptyPlayers').classList.toggle('hidden', state.players.length > 0);
+
+ const available = roster().filter(n => !state.players.some(p => p.name.toLowerCase() === n.toLowerCase()));
+ const savedRoster = $('savedRoster');
+ if (savedRoster) {
+  savedRoster.innerHTML = available.map(n => `<button class="roster-btn" type="button" data-name="${esc(n)}">＋ ${esc(n)}</button>`).join('');
+  savedRoster.querySelectorAll('[data-name]').forEach(b => {
+   b.onclick = () => {
+    if ($('playerName'))$('playerName').value = b.dataset.name;
+    addPlayer();
+   };
+  });
+ }
+ if ($('emptyRoster'))$('emptyRoster').classList.toggle('hidden', available.length > 0);
 
  renderGameHistory();
 }
 
-function renderGameHistory(){
- const history=loadGameHistory();
- if($('historyGamesCount'))$('historyGamesCount').textContent=`${history.length} ${history.length===1?'Spiel':'Spiele'}`;
- const clearBtn=$('clearHistoryBtn');
- if(clearBtn) clearBtn.classList.toggle('hidden',history.length===0);
+function renderGameHistory() {
+ const history = loadGameHistory();
+ if ($('historyGamesCount'))$('historyGamesCount').textContent = `${history.length} Spiele`;
+ const clearBtn = $('clearHistoryBtn');
+ if (clearBtn) clearBtn.classList.toggle('hidden', history.length === 0);
 
- if(!history.length){
-  if($('hallOfFame'))$('hallOfFame').innerHTML='';
-  if($('gameHistoryList'))$('gameHistoryList').innerHTML='<div class="empty">Noch keine beendeten Spiele gespeichert.</div>';
+ if (!history.length) {
+  if ($('hallOfFame'))$('hallOfFame').innerHTML = '';
+  if ($('gameHistoryList'))$('gameHistoryList').innerHTML = '<div class="empty">Noch keine beendeten Spiele gespeichert.</div>';
   return;
  }
 
- const winCounts={};
- history.forEach(g=>{
-  if(g.winnerName){
-   winCounts[g.winnerName]=(winCounts[g.winnerName]||0)+1;
-  }
- });
+ const winCounts = {};
+ history.forEach(g => { if (g.winnerName) winCounts[g.winnerName] = (winCounts[g.winnerName] || 0) + 1; });
+ const winEntries = Object.entries(winCounts).sort((a, b) => b[1] - a[1]);
 
- const winEntries=Object.entries(winCounts).sort((a,b)=>b[1]-a[1]);
- if($('hallOfFame')){$('hallOfFame').innerHTML=winEntries.map(([name,count])=>`
-   <div class="win-badge">🏆 ${esc(name)}: ${count}× Gewinner</div>
-  `).join('');
+ if ($('hallOfFame')) {$('hallOfFame').innerHTML = winEntries.map(([name, count]) => `
+   <div class="win-badge">🏆 ${esc(name)}: ${count}× Gewinner</div>`).join('');
  }
 
- const gameHistoryList=$('gameHistoryList');
- if(gameHistoryList){
-  gameHistoryList.innerHTML=history.map((g,idx)=>`
+ const gameHistoryList = $('gameHistoryList');
+ if (gameHistoryList) {
+  gameHistoryList.innerHTML = history.map((g, idx) => `
    <div class="game-archive-card">
     <div class="game-archive-header" data-toggle-archive="${idx}">
      <div>
-      <strong>Spiel #${g.gameNumber||(history.length-idx)} · Sieger: <span class="gold">${esc(g.winnerName)}</span></strong>
-      <div class="sub">${new Date(g.endedAt).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'})} Uhr · ${g.roundsCount} Runden</div>
+      <strong>Spiel #${g.gameNumber || (history.length - idx)} · Sieger: <span class="gold">${esc(g.winnerName)}</span></strong>
+      <div class="sub">${new Date(g.endedAt).toLocaleDateString('de-DE')} · ${g.roundsCount} Runden</div>
      </div>
      <span class="pill">Details ▾</span>
     </div>
     <div class="game-archive-details hidden" id="archive-details-${idx}">
-     <div style="margin-bottom:8px;" class="sub">Endplatzierungen:</div>
-     ${(g.standings||[]).map((s,i)=>`
-      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
-       <span>${i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}.`} ${esc(s.name)}</span>
-       <strong>${s.total>0?'+':''}${s.total} Punkte</strong>
-      </div>
-     `).join('')}
-     <button class="btn small danger ghost" type="button" style="margin-top:10px" data-delete-archive="${idx}">Spiel aus Verlauf löschen</button>
+     ${(g.standings || []).map((s, i) => `<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span>${i + 1}. ${esc(s.name)}</span><strong>${s.total} Pkt</strong></div>`).join('')}
+     <button class="btn small danger ghost" type="button" style="margin-top:8px" data-delete-archive="${idx}">Löschen</button>
     </div>
-   </div>
-  `).join('');
+   </div>`).join('');
 
-  gameHistoryList.querySelectorAll('[data-toggle-archive]').forEach(el=>{
-   el.onclick=()=>{
-    const idx=el.dataset.toggleArchive;
-    const details=$(`archive-details-${idx}`);
-    if(details) details.classList.toggle('hidden');
-   };
+  gameHistoryList.querySelectorAll('[data-toggle-archive]').forEach(el => {
+   el.onclick = () => { $(`archive-details-${el.dataset.toggleArchive}`).classList.toggle('hidden'); };
   });
-
-  gameHistoryList.querySelectorAll('[data-delete-archive]').forEach(btn=>{
-   btn.onclick=(e)=>{
+  gameHistoryList.querySelectorAll('[data-delete-archive]').forEach(btn => {
+   btn.onclick = (e) => {
     e.stopPropagation();
-    const idx=Number(btn.dataset.deleteArchive);
-    confirmAction('Spiel aus Verlauf löschen?','Möchtest du dieses abgelaufene Spiel wirklich löschen?','Löschen',()=>{
-     const h=loadGameHistory();
-     h.splice(idx,1);
-     saveGameHistory(h);
-     closeModal();
-     renderGameHistory();
-     toast('Spiel gelöscht');
+    const idx = Number(btn.dataset.deleteArchive);
+    confirmAction('Spiel löschen?', 'Möchtest du dieses Spiel aus dem Verlauf löschen?', 'Löschen', () => {
+     const h = loadGameHistory(); h.splice(idx, 1); saveGameHistory(h); closeModal(); renderGameHistory(); toast('Gelöscht');
     });
    };
   });
  }
 }
 
-function renderGame(){
- const sorted=totals();
- if($('roundCount'))$('roundCount').textContent=state.rounds.length;
- if($('playerCount'))$('playerCount').textContent=state.players.length;
- if($('leaderScore'))$('leaderScore').textContent=sorted.length?sorted[0].total:'—';
- const nextRound=state.rounds.length+1;
- if($('gameEyebrow'))$('gameEyebrow').textContent=`SPIEL ${state.gameNumber} · LAUFEND`;
- if($('gameHeadline'))$('gameHeadline').textContent=editingRound>=0?`Runde ${editingRound+1} bearbeiten`:`Runde ${nextRound}`;
- if($('gameSubheadline'))$('gameSubheadline').textContent=editingRound>=0?'Korrigiere die gespeicherten Punkte.':'Tragt die Punkte ein und speichert die Runde.';
- if($('roundTitle'))$('roundTitle').textContent=editingRound>=0?'Runde bearbeiten':'Punkte dieser Runde';
- if($('roundSub'))$('roundSub').textContent=editingRound>=0?'Die Rangliste wird danach aktualisiert.':'Für jeden Spieler Punkte eintragen';
- if($('roundPill'))$('roundPill').textContent=`RUNDE ${editingRound>=0?editingRound+1:nextRound}`;
- if($('editingNote'))$('editingNote').classList.toggle('hidden',editingRound<0);
- if($('cancelEditBtn'))$('cancelEditBtn').classList.toggle('hidden',editingRound<0);
- const saveRoundBtn=$('saveRoundBtn');
- if(saveRoundBtn) saveRoundBtn.textContent=editingRound>=0?'Änderungen speichern':'Runde speichern';
+function renderGame() {
+ const sorted = totals();
+ if ($('roundCount'))$('roundCount').textContent = state.rounds.length;
+ if ($('playerCount'))$('playerCount').textContent = state.players.length;
+ if ($('leaderScore'))$('leaderScore').textContent = sorted.length ? sorted[0].total : '—';
+ const nextRound = state.rounds.length + 1;
+ if ($('gameEyebrow'))$('gameEyebrow').textContent = `SPIEL ${state.gameNumber} · LAUFEND`;
+ if ($('gameHeadline'))$('gameHeadline').textContent = editingRound >= 0 ? `Runde ${editingRound + 1} bearbeiten` : `Runde ${nextRound}`;
+ if ($('editingNote'))$('editingNote').classList.toggle('hidden', editingRound < 0);
+ if ($('cancelEditBtn'))$('cancelEditBtn').classList.toggle('hidden', editingRound < 0);
+ if ($('saveRoundBtn'))$('saveRoundBtn').textContent = editingRound >= 0 ? 'Änderungen speichern' : 'Runde speichern';
 
- const scoreInputs=$('scoreInputs');
- if(scoreInputs){
-  scoreInputs.innerHTML=state.players.map(p=>{
-   const old=editingRound>=0?state.rounds[editingRound].scores[p.id]:undefined;
-   const draft=state.draftScores[p.id];
-   const value=old!==undefined?old:(draft!==undefined?draft:'');
-   const unavailable=editingRound>=0&&p.joinedAtRound>editingRound+1;
+ const scoreInputs = $('scoreInputs');
+ if (scoreInputs) {
+  scoreInputs.innerHTML = state.players.map(p => {
+   const old = editingRound >= 0 ? state.rounds[editingRound].scores[p.id] : undefined;
+   const draft = state.draftScores[p.id];
+   const value = old !== undefined ? old : (draft !== undefined ? draft : '');
+   const unavailable = editingRound >= 0 && p.joinedAtRound > editingRound + 1;
    return `<label class="score-row">
-    <span class="player-name">${esc(p.name)}${p.joinedAtRound>1?`<div class="sub">Einstieg ab Runde ${p.joinedAtRound}</div>`:''}</span>
-    <input class="score-input" type="number" inputmode="decimal" step="1" data-score="${p.id}" value="${value}" placeholder="0" aria-label="Punkte für ${esc(p.name)}" ${unavailable?'disabled':''}>
+    <span class="player-name">${esc(p.name)}</span>
+    <input class="score-input" type="number" inputmode="decimal" data-score="${p.id}" value="${value}" placeholder="0" ${unavailable ? 'disabled' : ''}>
    </label>`;
-  }).join('')||'<div class="empty">Gehe zurück zur Spielverwaltung und füge mindestens zwei Spieler hinzu.</div>';
+  }).join('') || '<div class="empty">Keine Spieler vorhanden.</div>';
 
-  scoreInputs.querySelectorAll('[data-score]').forEach(input=>{
-   input.addEventListener('input',()=>{
-    state.draftScores[input.dataset.score]=input.value;
-    persist();
-   });
+  scoreInputs.querySelectorAll('[data-score]').forEach(input => {
+   input.oninput = () => { state.draftScores[input.dataset.score] = input.value; persist(); };
   });
  }
 
- if(saveRoundBtn){
-  saveRoundBtn.disabled=state.players.length<2;
-  saveRoundBtn.style.opacity=saveRoundBtn.disabled?'.4':'1';
- }
-
- const leaderboard=$('leaderboard');
- if(leaderboard){
-  leaderboard.innerHTML=sorted.length?`
+ const leaderboard = $('leaderboard');
+ if (leaderboard) {
+  leaderboard.innerHTML = sorted.length ? `
    <div class="table-wrap"><table>
    <thead><tr><th>#</th><th>Spieler</th><th>Runden</th><th>Gesamt</th></tr></thead>
-   <tbody>${sorted.map((p,i)=>`<tr>
-    <td>${i===0?'★':i+1}</td>
-    <td>${esc(p.name)}${p.joinedAtRound>1?`<div class="sub">ab Runde ${p.joinedAtRound}</div>`:''}</td>
-    <td>${p.played}</td>
-    <td class="total ${i===0?'gold':''}">${p.total>0?'+':''}${p.total}</td>
-   </tr>`).join('')}</tbody></table></div>`:
-   '<div class="empty">Noch keine Spieler vorhanden.</div>';
+   <tbody>${sorted.map((p, i) => `<tr><td>${i === 0 ? '★' : i + 1}</td><td>${esc(p.name)}</td><td>${p.played}</td><td class="total ${i === 0 ? 'gold' : ''}">${p.total}</td></tr>`).join('')}</tbody>
+   </table></div>` : '<div class="empty">Keine Punkte eingetragen.</div>';
  }
 
- if($('historyCount'))$('historyCount').textContent=`${state.rounds.length} ${state.rounds.length===1?'Runde':'Runden'}`;
- const historyEl=$('history');
- if(historyEl){
-  historyEl.innerHTML=state.rounds.length?[...state.rounds].map((r,i)=>({r,i})).reverse().map(({r,i})=>`
+ const historyEl = $('history');
+ if (historyEl) {
+  historyEl.innerHTML = state.rounds.length ? [...state.rounds].map((r, i) => ({ r, i })).reverse().map(({ r, i }) => `
    <div class="history-item">
-    <div>
-     <strong>Runde ${i+1}</strong>
-     <div class="sub" style="margin-top:4px">${new Date(r.date).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</div>
-     <button class="btn small ghost" type="button" style="margin-top:8px" data-edit="${i}">Bearbeiten</button>
-    </div>
-    <div class="history-scores">${state.players.map(p=>
-     Object.prototype.hasOwnProperty.call(r.scores,p.id)
-      ?`${esc(p.name)}: <b>${(Number(r.scores[p.id])\vert{}\vert{}0)>0?'+':''}${Number(r.scores[p.id])||0}</b>`
-      :`<span class="sub">${esc(p.name)}: noch nicht dabei</span>`
-    ).join('<br>')}</div>
-   </div>`).join(''):'<div class="empty">Noch keine Runde gespeichert.</div>';
+    <div><strong>Runde ${i + 1}</strong><br><button class="btn small ghost" type="button" style="margin-top:6px" data-edit="${i}">Bearbeiten</button></div>
+    <div class="history-scores">${state.players.map(p => Object.prototype.hasOwnProperty.call(r.scores, p.id) ? `${esc(p.name)}: <b>${r.scores[p.id]}</b>` : '').join('<br>')}</div>
+   </div>`).join('') : '<div class="empty">Keine Runde gespeichert.</div>';
 
-  historyEl.querySelectorAll('[data-edit]').forEach(b=>{
-   b.onclick=()=>{
-    editingRound=Number(b.dataset.edit);
-    state.draftScores={};
-    persist();
-    renderGame();
-    const roundSec=$('roundSection');
-    if(roundSec) roundSec.scrollIntoView({behavior:'smooth',block:'start'});
-   };
+  historyEl.querySelectorAll('[data-edit]').forEach(b => {
+   b.onclick = () => { editingRound = Number(b.dataset.edit); state.draftScores = {}; persist(); renderGame(); };
   });
  }
-
- const undoBtn=$('undoBtn');
- if(undoBtn){
-  undoBtn.disabled=!state.rounds.length;
-  undoBtn.style.opacity=undoBtn.disabled?'.4':'1';
- }
 }
 
-function addPlayer(){
- const playerNameInput=$('playerName');
- if(!playerNameInput)return;
- const name=playerNameInput.value.trim();
- if(!name)return toast('Bitte einen Namen eingeben.');
- if(state.players.some(p=>p.name.toLowerCase()===name.toLowerCase()))return toast('Dieser Spieler ist bereits eingetragen.');
- const joinedAtRound=state.rounds.length+1;
- const id='p_' + Date.now() + '_' + Math.floor(Math.random() * 1000000);
- state.players.push({id,name,joinedAtRound});
- state.draftScores[id]='';
+function addPlayer() {
+ const input = $('playerName');
+ if (!input) return;
+ const name = input.value.trim();
+ if (!name) return toast('Bitte Namen eingeben.');
+ if (state.players.some(p => p.name.toLowerCase() === name.toLowerCase())) return toast('Bereits eingetragen.');
+ const id = 'p_' + Date.now() + '_' + Math.floor(Math.random() * 1000000);
+ state.players.push({ id, name, joinedAtRound: state.rounds.length + 1 });
+ state.draftScores[id] = '';
  rememberName(name);
- playerNameInput.value='';
+ input.value = '';
  persist();
  renderStart();
- toast(joinedAtRound>1?`${name} steigt ab Runde ${joinedAtRound} ein`:`${name} hinzugefügt`);
+ toast(`${name} hinzugefügt`);
 }
 
-function startGame(){
- if(state.players.length<2)return toast('Bitte mindestens zwei Spieler hinzufügen.');
- state.started=true;
- state.finished=false;
+function startGame() {
+ if (state.players.length < 2) return toast('Mindestens zwei Spieler erforderlich.');
+ state.started = true;
+ state.finished = false;
  persist();
  showGame();
 }
 
-function saveRound(){
- if(state.players.length<2)return toast('Bitte mindestens zwei Spieler hinzufügen.');
- const scores={};
- document.querySelectorAll('[data-score]').forEach(input=>{
-  if(!input.disabled){
-   scores[input.dataset.score]=input.value.trim()===''?0:Number(input.value);
-  }
+function saveRound() {
+ if (state.players.length < 2) return toast('Mindestens zwei Spieler erforderlich.');
+ const scores = {};
+ document.querySelectorAll('[data-score]').forEach(input => {
+  if (!input.disabled) scores[input.dataset.score] = input.value.trim() === '' ? 0 : Number(input.value);
  });
- if(Object.values(scores).some(v=>!Number.isFinite(v)))return toast('Bitte gültige Punktzahlen eingeben.');
- if(editingRound>=0){
-  const round=state.rounds[editingRound];
-  state.players.forEach(p=>{
-   if(p.joinedAtRound<=editingRound+1&&Object.prototype.hasOwnProperty.call(scores,p.id)){
-    round.scores[p.id]=scores[p.id];
+ if (Object.values(scores).some(v => !Number.isFinite(v))) return toast('Ungültige Punktzahl.');
+
+ if (editingRound >= 0) {
+  const round = state.rounds[editingRound];
+  state.players.forEach(p => {
+   if (p.joinedAtRound <= editingRound + 1 && Object.prototype.hasOwnProperty.call(scores, p.id)) {
+    round.scores[p.id] = scores[p.id];
    }
   });
-  round.editedAt=new Date().toISOString();
-  editingRound=-1;
+  editingRound = -1;
   toast('Runde korrigiert');
- }else{
-  state.rounds.push({date:new Date().toISOString(),scores});
+ } else {
+  state.rounds.push({ date: new Date().toISOString(), scores });
   toast('Runde gespeichert');
  }
- state.draftScores={};
+ state.draftScores = {};
  persist();
  renderGame();
 }
 
-function clearInputs(){
- document.querySelectorAll('[data-score]').forEach(i=>i.value='');
- state.draftScores={};
- persist();
+function confirmAction(title, text, label, action) {
+ if ($('modalTitle'))$('modalTitle').textContent = title;
+ if ($('modalText'))$('modalText').textContent = text;
+ if ($('modalConfirm'))$('modalConfirm').textContent = label;
+ pendingAction = action;
+ if ($('modal'))$('modal').classList.remove('hidden');
 }
 
-function cancelEdit(){
- editingRound=-1;
- state.draftScores={};
- persist();
- renderGame();
+function closeModal() {
+ if ($('modal'))$('modal').classList.add('hidden');
+ pendingAction = null;
 }
 
-function confirmAction(title,text,label,action){
- if($('modalTitle'))$('modalTitle').textContent=title;
- if($('modalText'))$('modalText').textContent=text;
- if($('modalConfirm'))$('modalConfirm').textContent=label;
- pendingAction=action;
- if($('modal'))$('modal').classList.remove('hidden');
-}
-
-function closeModal(){
- if($('modal'))$('modal').classList.add('hidden');
- pendingAction=null;
-}
-
-function showWinner(){
- if(state.players.length<2)return toast('Es werden mindestens zwei Spieler benötigt.');
- if(!state.rounds.length)return toast('Speichere zuerst mindestens eine Runde.');
- const sorted=totals();
- const winner=sorted[0];
- if($('winnerName'))$('winnerName').textContent=winner.name;
- if($('winnerScore'))$('winnerScore').textContent=`${winner.total>0?'+':''}${winner.total} Gesamtpunkte`;
- if($('winnerRounds'))$('winnerRounds').textContent=state.rounds.length;
- if($('winnerStandings')){$('winnerStandings').innerHTML=sorted.map((p,i)=>`
-   <div class="history-item">
-    <div><strong>${i+1}. ${esc(p.name)}</strong><div class="sub">${p.played} gewertete Runden</div></div>
-    <strong>${p.total>0?'+':''}${p.total} Punkte</strong>
-   </div>`).join('');
- }
- state.finished=true;
- persist();
- if($('winnerScreen'))$('winnerScreen').classList.remove('hidden');
-}
-
-function finishGame(){
- const sorted=totals();
- const winner=sorted[0];
- 
- const history=loadGameHistory();
- history.unshift({
-  gameNumber:state.gameNumber||1,
-  endedAt:new Date().toISOString(),
-  winnerName:winner?winner.name:'Unbekannt',
-  roundsCount:state.rounds.length,
-  standings:sorted.map(p=>({name:p.name,total:p.total}))
- });
- saveGameHistory(history);
-
- const next=Number(state.gameNumber||1)+1;
- state=freshState(next);
- editingRound=-1;
- persist();
- if($('winnerScreen'))$('winnerScreen').classList.add('hidden');
- closeModal();
- showStart();
- toast('Spiel im Verlauf gespeichert & neues Spiel vorbereitet.');
-}
-
-function exportBackup(){
- const blob=new Blob([JSON.stringify({
-  format:'RummikubScoreBackup',
-  version:3,
-  exportedAt:new Date().toISOString(),
-  state,
-  roster:roster(),
-  gameHistory:loadGameHistory()
- },null,2)],{type:'application/json'});
- const url=URL.createObjectURL(blob);
- const a=document.createElement('a');
- a.href=url;
- a.download=`rummikub-sicherung-${new Date().toISOString().slice(0,10)}.json`;
- a.click();
- setTimeout(()=>URL.revokeObjectURL(url),1500);
- toast('Sicherung wird exportiert');
-}
-
-function importBackup(file){
- if(!file)return;
- const reader=new FileReader();
- reader.onload=()=>{
-  try{
-   const data=JSON.parse(reader.result);
-   const s=data.state||data;
-   if(!Array.isArray(s.players)||!Array.isArray(s.rounds))throw new Error('invalid');
-   confirmAction('Sicherung importieren?','Der aktuelle Spielstand wird durch die Sicherung ersetzt.','Importieren',()=>{
-    state=s;
-    if(!state.draftScores)state.draftScores={};
-    if(Array.isArray(data.roster))localStorage.setItem(ROSTER_KEY,JSON.stringify(data.roster));
-    if(Array.isArray(data.gameHistory))saveGameHistory(data.gameHistory);
-    state.started=state.started||state.rounds.length>0;
-    persist();
-    closeModal();
-    if(state.started)showGame();else showStart();
-    toast('Sicherung importiert');
-   });
-  }catch(e){toast('Diese Sicherungsdatei ist ungültig.');}
- };
- reader.readAsText(file);
-}
-
-const clearHistoryBtn=$('clearHistoryBtn');
-if(clearHistoryBtn){
- clearHistoryBtn.onclick=()=>{
-  confirmAction('Gesamte Historie leeren?','Möchtest du wirklich alle aufgezeichneten vergangenen Spiele löschen?','Historie löschen',()=>{
-   saveGameHistory([]);
-   closeModal();
-   renderGameHistory();
-   toast('Spielverlauf gelöscht');
+// Direkte Button-Verknüpfungen beim Laden
+window.onload = function() {
+ if ($('addPlayerBtn'))$('addPlayerBtn').onclick = addPlayer;
+ if ($('playerName'))$('playerName').onkeydown = e => { if (e.key === 'Enter') addPlayer(); };
+ if ($('startGameBtn'))$('startGameBtn').onclick = () => { if (state.started && state.rounds.length) showGame(); else startGame(); };
+ if ($('resumeGameBtn'))$('resumeGameBtn').onclick = showGame;
+ if ($('managePlayersBtn'))$('managePlayersBtn').onclick = showStart;
+ if ($('saveRoundBtn'))$('saveRoundBtn').onclick = saveRound;
+ if ($('clearRoundBtn'))$('clearRoundBtn').onclick = () => { document.querySelectorAll('[data-score]').forEach(i => i.value = ''); state.draftScores = {}; persist(); };
+ if ($('cancelEditBtn'))$('cancelEditBtn').onclick = () => { editingRound = -1; state.draftScores = {}; persist(); renderGame(); };
+ if ($('undoBtn'))$('undoBtn').onclick = () => {
+  if (!state.rounds.length) return;
+  confirmAction('Letzte Runde löschen?', 'Möchtest du die letzte Runde wirklich zurücknehmen?', 'Löschen', () => {
+   state.rounds.pop(); editingRound = -1; state.draftScores = {}; persist(); closeModal(); renderGame(); toast('Entfernt');
   });
  };
-}
-
-const addPlayerBtn=$('addPlayerBtn');
-if(addPlayerBtn){
- addPlayerBtn.onclick=addPlayer;
-}
-
-const playerNameInput=$('playerName');
-if(playerNameInput){
- playerNameInput.addEventListener('keydown',e=>{
-  if(e.key==='Enter')addPlayer();
- });
-}
-
-const startGameBtn=$('startGameBtn');
-if(startGameBtn){
- startGameBtn.onclick=()=>{
-  if(state.started&&state.rounds.length){
-   showGame();
-  }else{
-   startGame();
-  }
- };
-}
-
-const resumeGameBtn=$('resumeGameBtn');
-if(resumeGameBtn) resumeGameBtn.onclick=showGame;
-
-const managePlayersBtn=$('managePlayersBtn');
-if(managePlayersBtn){
- managePlayersBtn.onclick=()=>{
-  showStart();
-  toast('Spieler hinzufügen oder Spiel fortsetzen');
- };
-}
-
-const gameExportBtn=$('gameExportBtn');
-if(gameExportBtn) gameExportBtn.onclick=exportBackup;
-
-const saveRoundBtn=$('saveRoundBtn');
-if(saveRoundBtn) saveRoundBtn.onclick=saveRound;
-
-const clearRoundBtn=$('clearRoundBtn');
-if(clearRoundBtn) clearRoundBtn.clearInputs=clearInputs; // fallback
-if(clearRoundBtn) clearRoundBtn.onclick=clearInputs;
-
-const cancelEditBtn=$('cancelEditBtn');
-if(cancelEditBtn) cancelEditBtn.onclick=cancelEdit;
-
-const undoBtn=$('undoBtn');
-if(undoBtn){
- undoBtn.onclick=()=>{
-  if(!state.rounds.length)return;
-  confirmAction('Letzte Runde zurücknehmen?','Die zuletzt gespeicherte Runde wird gelöscht und die Rangliste neu berechnet.','Runde löschen',()=>{
-   state.rounds.pop();
-   editingRound=-1;
-   state.draftScores={};
-   persist();
-   closeModal();
-   renderGame();
-   toast('Letzte Runde entfernt');
-  });
- };
-}
-
-const winnerBtn=$('winnerBtn');
-if(winnerBtn) winnerBtn.onclick=showWinner;
-
-const continueBtn=$('continueBtn');
-if(continueBtn){
- continueBtn.onclick=()=>{
-  state.finished=false;
+ if ($('winnerBtn'))$('winnerBtn').onclick = () => {
+  if (state.players.length < 2 || !state.rounds.length) return toast('Nicht genug Daten für ein Ende.');
+  const sorted = totals();
+  const winner = sorted[0];
+  if ($('winnerName'))$('winnerName').textContent = winner.name;
+  if ($('winnerScore'))$('winnerScore').textContent = `${winner.total} Gesamtpunkte`;
+  if ($('winnerRounds'))$('winnerRounds').textContent = state.rounds.length;
+  if ($('winnerStandings'))$('winnerStandings').innerHTML = sorted.map((p, i) => `<div class="history-item"><div><strong>${i + 1}. ${esc(p.name)}</strong></div><strong>${p.total} Pkt</strong></div>`).join('');
+  state.finished = true;
   persist();
-  if($('winnerScreen'))$('winnerScreen').classList.add('hidden');
-  showGame();
-  toast('Ihr könnt weiterspielen');
+  if ($('winnerScreen'))$('winnerScreen').classList.remove('hidden');
  };
-}
-
-const finishBtn=$('finishBtn');
-if(finishBtn){
- finishBtn.onclick=()=>{
-  confirmAction('Spiel endgültig beenden?','Der aktuelle Spielstand wird abgeschlossen, im Verlauf gespeichert und für ein neues Spiel zurückgesetzt.','Spiel beenden',finishGame);
+ if ($('continueBtn'))$('continueBtn').onclick = () => { state.finished = false; persist(); if ($('winnerScreen'))$('winnerScreen').classList.add('hidden'); showGame(); };
+ if ($('finishBtn'))$('finishBtn').onclick = () => {
+  confirmAction('Spiel beenden?', 'Das Spiel wird im Verlauf gespeichert und zurückgesetzt.', 'Beenden', () => {
+   const sorted = totals();
+   const history = loadGameHistory();
+   history.unshift({ gameNumber: state.gameNumber || 1, endedAt: new Date().toISOString(), winnerName: sorted[0] ? sorted[0].name : 'Unbekannt', roundsCount: state.rounds.length, standings: sorted.map(p => ({ name: p.name, total: p.total })) });
+   saveGameHistory(history);
+   state = { players: [], rounds: [], gameNumber: (state.gameNumber || 1) + 1, finished: false, started: false, draftScores: {} };
+   persist();
+   if ($('winnerScreen'))$('winnerScreen').classList.add('hidden');
+   closeModal();
+   showStart();
+   toast('Spiel beendet und gespeichert');
+  });
  };
-}
-
-const exportBtn=$('exportBtn');
-if(exportBtn) exportBtn.onclick=exportBackup;
-
-const importBtn=$('importBtn');
-if(importBtn){
- importBtn.onclick=()=>{
-  const importFile=$('importFile');
-  if(importFile) importFile.click();
+ if ($('clearHistoryBtn'))$('clearHistoryBtn').onclick = () => {
+  confirmAction('Verlauf leeren?', 'Möchtest du alle vergangenen Spiele löschen?', 'Leeren', () => { saveGameHistory([]); closeModal(); renderGameHistory(); toast('Verlauf gelöscht'); });
  };
-}
-
-const importFile=$('importFile');
-if(importFile){
- importFile.onchange=e=>{
-  importBackup(e.target.files[0]);
-  e.target.value='';
+ if ($('exportBtn'))$('exportBtn').onclick = () => {
+  const blob = new Blob([JSON.stringify({ state, roster: roster(), gameHistory: loadGameHistory() }, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'rummikub-backup.json'; a.click();
  };
-}
-
-const modalCancel=$('modalCancel');
-if(modalCancel) modalCancel.onclick=closeModal;
-
-const modalConfirm=$('modalConfirm');
-if(modalConfirm){
- modalConfirm.onclick=()=>{
-  if(pendingAction)pendingAction();
+ if ($('gameExportBtn')) $('gameExportBtn').onclick =$('exportBtn').onclick;
+ if ($('importBtn')) $('importBtn').onclick = () =>$('importFile').click();
+ if ($('importFile'))$('importFile').onchange = e => {
+  const reader = new FileReader();
+  reader.onload = () => {
+   try {
+    const data = JSON.parse(reader.result);
+    state = data.state || data;
+    if (Array.isArray(data.roster)) localStorage.setItem(ROSTER_KEY, JSON.stringify(data.roster));
+    if (Array.isArray(data.gameHistory)) saveGameHistory(data.gameHistory);
+    persist();
+    if (state.started) showGame(); else showStart();
+    toast('Importiert');
+   } catch (err) { toast('Ungültige Datei'); }
+  };
+  reader.readAsText(e.target.files[0]);
+  e.target.value = '';
  };
-}
+ if ($('modalCancel'))$('modalCancel').onclick = closeModal;
+ if ($('modalConfirm'))$('modalConfirm').onclick = () => { if (pendingAction) pendingAction(); };
 
-if(state.started&&!state.finished)showGame();
-else showStart();
-
-});
+ if (state.started && !state.finished) showGame(); else showStart();
+};
 </script>
 </body>
 </html>
