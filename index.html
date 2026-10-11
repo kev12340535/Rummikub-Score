@@ -109,12 +109,11 @@ tr:last-child td{border-bottom:0}
 .trophy{font-size:78px;filter:drop-shadow(0 12px 30px #d9b56d45)}
 .winner-kicker{color:var(--gold);letter-spacing:3px;text-transform:uppercase;font-size:11px;font-weight:800;margin:16px 0}
 .winner-title{font-size:40px;line-height:1.03;letter-spacing:-1.6px;margin:0}
-.winner-name{font-size:29px;font-weight:850;color:var(--gold);margin:15px 0;overflow-wrap:anywhere}
+.winner-name{font-size:26px;font-weight:850;color:var(--gold);margin:15px 0;overflow-wrap:anywhere}
 .winner-box{border:1px solid #5a4827;background:#ffffff08;border-radius:17px;padding:15px;margin:20px 0}
 .winner-box span{font-size:11px;color:var(--muted)}
 .winner-box strong{display:block;font-size:24px;margin-top:5px}
 .winner-actions{display:grid;gap:9px;margin-top:18px}
-.winner-actions .btn{padding:14px}
 .game-archive-card{background:#101216;border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:9px}
 .game-archive-header{display:flex;justify-content:space-between;align-items:center;cursor:pointer}
 .game-archive-details{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
@@ -242,8 +241,8 @@ tr:last-child td{border-bottom:0}
 <div class="winner-screen hidden" id="winnerScreen">
  <div class="winner-inner">
   <div class="trophy">🏆</div>
-  <div class="winner-kicker">Spiel abgeschlossen</div>
-  <h2 class="winner-title">Der absolute<br>Gewinner</h2>
+  <div class="winner-kicker" id="winnerKicker">Spiel abgeschlossen</div>
+  <h2 class="winner-title" id="winnerTitle">Der Gewinner</h2>
   <div class="winner-name" id="winnerName">—</div>
   <div id="winnerScore" class="sub"></div>
   <div class="winner-box"><span>Gespielte Runden</span><strong id="winnerRounds">0</strong></div>
@@ -402,7 +401,13 @@ function renderGameHistory() {
  }
 
  const winCounts = {};
- history.forEach(g => { if (g.winnerName) winCounts[g.winnerName] = (winCounts[g.winnerName] || 0) + 1; });
+ history.forEach(g => { 
+  if (Array.isArray(g.winnerNames)) {
+   g.winnerNames.forEach(w => { winCounts[w] = (winCounts[w] || 0) + 1; });
+  } else if (g.winnerName) { 
+   winCounts[g.winnerName] = (winCounts[g.winnerName] || 0) + 1; 
+  } 
+ });
  const winEntries = Object.entries(winCounts).sort((a, b) => b[1] - a[1]);
 
  if ($('hallOfFame')) {$('hallOfFame').innerHTML = winEntries.map(([name, count]) => `
@@ -411,11 +416,13 @@ function renderGameHistory() {
 
  const gameHistoryList = $('gameHistoryList');
  if (gameHistoryList) {
-  gameHistoryList.innerHTML = history.map((g, idx) => `
+  gameHistoryList.innerHTML = history.map((g, idx) => {
+   const winnersStr = Array.isArray(g.winnerNames) ? g.winnerNames.join(', ') : (g.winnerName || 'Unbekannt');
+   return `
    <div class="game-archive-card">
     <div class="game-archive-header" data-toggle-archive="${idx}">
      <div>
-      <strong>Spiel #${g.gameNumber || (history.length - idx)} · Sieger: <span class="gold">${esc(g.winnerName)}</span></strong>
+      <strong>Spiel #${g.gameNumber || (history.length - idx)} · Sieger: <span class="gold">${esc(winnersStr)}</span></strong>
       <div class="sub">${new Date(g.endedAt).toLocaleDateString('de-DE')} · ${g.roundsCount} Runden</div>
      </div>
      <span class="pill">Details ▾</span>
@@ -424,7 +431,8 @@ function renderGameHistory() {
      ${(g.standings || []).map((s, i) => `<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span>${i + 1}. ${esc(s.name)}</span><strong>${s.total} Pkt</strong></div>`).join('')}
      <button class="btn small danger ghost" type="button" style="margin-top:8px" data-delete-archive="${idx}">Löschen</button>
     </div>
-   </div>`).join('');
+   </div>`;
+  }).join('');
 
   gameHistoryList.querySelectorAll('[data-toggle-archive]').forEach(el => {
    el.onclick = () => { $(`archive-details-${el.dataset.toggleArchive}`).classList.toggle('hidden'); };
@@ -559,11 +567,16 @@ function closeModal() {
 
 function executeFinishGame() {
  const sorted = totals();
+ const bestScore = sorted.length ? sorted[0].total : 0;
+ const winners = sorted.filter(p => p.total === bestScore);
+ const winnerNames = winners.map(w => w.name);
+
  const history = loadGameHistory();
  history.unshift({ 
   gameNumber: state.gameNumber || 1, 
   endedAt: new Date().toISOString(), 
-  winnerName: sorted[0] ? sorted[0].name : 'Unbekannt', 
+  winnerName: winnerNames.join(', '), 
+  winnerNames: winnerNames,
   roundsCount: state.rounds.length, 
   standings: sorted.map(p => ({ name: p.name, total: p.total })) 
  });
@@ -595,9 +608,13 @@ window.onload = function() {
  if ($('winnerBtn'))$('winnerBtn').onclick = () => {
   if (state.players.length < 2 || !state.rounds.length) return toast('Nicht genug Daten für ein Ende.');
   const sorted = totals();
-  const winner = sorted[0];
-  if ($('winnerName'))$('winnerName').textContent = winner.name;
-  if ($('winnerScore'))$('winnerScore').textContent = `${winner.total} Gesamtpunkte`;
+  const bestScore = sorted[0].total;
+  const winners = sorted.filter(p => p.total === bestScore);
+  
+  if ($('winnerKicker'))$('winnerKicker').textContent = winners.length > 1 ? 'Geteilter Sieg' : 'Spiel abgeschlossen';
+  if ($('winnerTitle'))$('winnerTitle').textContent = winners.length > 1 ? 'Die Gewinner' : 'Der Gewinner';
+  if ($('winnerName'))$('winnerName').textContent = winners.map(w => w.name).join(' & ');
+  if ($('winnerScore'))$('winnerScore').textContent = `${bestScore} Gesamtpunkte`;
   if ($('winnerRounds'))$('winnerRounds').textContent = state.rounds.length;
   if ($('winnerStandings'))$('winnerStandings').innerHTML = sorted.map((p, i) => `<div class="history-item"><div><strong>${i + 1}. ${esc(p.name)}</strong></div><strong>${p.total} Pkt</strong></div>`).join('');
   state.finished = true;
@@ -606,7 +623,6 @@ window.onload = function() {
  };
  if ($('continueBtn'))$('continueBtn').onclick = () => { state.finished = false; persist(); if ($('winnerScreen'))$('winnerScreen').classList.add('hidden'); showGame(); };
  
- // Direktes Beenden ohne doppeltes Modal für maximale Zuverlässigkeit
  if ($('finishBtn'))$('finishBtn').onclick = () => {
   executeFinishGame();
  };
