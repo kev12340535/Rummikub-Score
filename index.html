@@ -632,7 +632,8 @@ window.onload = function() {
  };
  if ($('exportBtn'))$('exportBtn').onclick = () => {
   const blob = new Blob([JSON.stringify({ state, roster: roster(), gameHistory: loadGameHistory() }, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'rummikub-backup.json'; a.click();
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `rummikub-sicherung-${new Date().toISOString().slice(0,10)}.json`; a.click();
+  toast('Sicherung exportiert');
  };
  if ($('gameExportBtn')) $('gameExportBtn').onclick =$('exportBtn').onclick;
  if ($('importBtn')) $('importBtn').onclick = () =>$('importFile').click();
@@ -646,8 +647,8 @@ window.onload = function() {
     if (Array.isArray(data.gameHistory)) saveGameHistory(data.gameHistory);
     persist();
     if (state.started) showGame(); else showStart();
-    toast('Importiert');
-   } catch (err) { toast('Ungültige Datei'); }
+    toast('Sicherung erfolgreich importiert');
+   } catch (err) { toast('Ungültige Sicherungsdatei'); }
   };
   reader.readAsText(e.target.files[0]);
   e.target.value = '';
