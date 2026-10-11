@@ -557,6 +557,25 @@ function closeModal() {
  pendingAction = null;
 }
 
+function executeFinishGame() {
+ const sorted = totals();
+ const history = loadGameHistory();
+ history.unshift({ 
+  gameNumber: state.gameNumber || 1, 
+  endedAt: new Date().toISOString(), 
+  winnerName: sorted[0] ? sorted[0].name : 'Unbekannt', 
+  roundsCount: state.rounds.length, 
+  standings: sorted.map(p => ({ name: p.name, total: p.total })) 
+ });
+ saveGameHistory(history);
+ state = { players: [], rounds: [], gameNumber: (state.gameNumber || 1) + 1, finished: false, started: false, draftScores: {} };
+ persist();
+ if ($('winnerScreen'))$('winnerScreen').classList.add('hidden');
+ closeModal();
+ showStart();
+ toast('Spiel beendet und gespeichert');
+}
+
 // Direkte Button-Verknüpfungen beim Laden
 window.onload = function() {
  if ($('addPlayerBtn'))$('addPlayerBtn').onclick = addPlayer;
@@ -586,20 +605,12 @@ window.onload = function() {
   if ($('winnerScreen'))$('winnerScreen').classList.remove('hidden');
  };
  if ($('continueBtn'))$('continueBtn').onclick = () => { state.finished = false; persist(); if ($('winnerScreen'))$('winnerScreen').classList.add('hidden'); showGame(); };
+ 
+ // Direktes Beenden ohne doppeltes Modal für maximale Zuverlässigkeit
  if ($('finishBtn'))$('finishBtn').onclick = () => {
-  confirmAction('Spiel beenden?', 'Das Spiel wird im Verlauf gespeichert und zurückgesetzt.', 'Beenden', () => {
-   const sorted = totals();
-   const history = loadGameHistory();
-   history.unshift({ gameNumber: state.gameNumber || 1, endedAt: new Date().toISOString(), winnerName: sorted[0] ? sorted[0].name : 'Unbekannt', roundsCount: state.rounds.length, standings: sorted.map(p => ({ name: p.name, total: p.total })) });
-   saveGameHistory(history);
-   state = { players: [], rounds: [], gameNumber: (state.gameNumber || 1) + 1, finished: false, started: false, draftScores: {} };
-   persist();
-   if ($('winnerScreen'))$('winnerScreen').classList.add('hidden');
-   closeModal();
-   showStart();
-   toast('Spiel beendet und gespeichert');
-  });
+  executeFinishGame();
  };
+
  if ($('clearHistoryBtn'))$('clearHistoryBtn').onclick = () => {
   confirmAction('Verlauf leeren?', 'Möchtest du alle vergangenen Spiele löschen?', 'Leeren', () => { saveGameHistory([]); closeModal(); renderGameHistory(); toast('Verlauf gelöscht'); });
  };
