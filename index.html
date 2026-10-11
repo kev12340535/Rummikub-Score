@@ -157,7 +157,7 @@ tr:last-child td{border-bottom:0}
   </div>
   <div class="add-row">
    <input id="playerName" class="input" maxlength="28" placeholder="Name eingeben" autocomplete="off">
-   <button class="btn primary" id="addPlayerBtn">Hinzufügen</button>
+   <button class="btn primary" id="addPlayerBtn" type="button">Hinzufügen</button>
   </div>
   <div id="playerList" class="player-list"></div>
   <div id="emptyPlayers" class="empty">Noch keine Spieler eingetragen.</div>
@@ -178,14 +178,14 @@ tr:last-child td{border-bottom:0}
   </div>
   <div id="hallOfFame" style="margin-bottom:12px;display:flex;flex-wrap:wrap;gap:6px"></div>
   <div id="gameHistoryList"></div>
-  <button class="btn small ghost hidden" id="clearHistoryBtn" style="margin-top:10px">Verlauf leeren</button>
+  <button class="btn small ghost hidden" id="clearHistoryBtn" type="button" style="margin-top:10px">Verlauf leeren</button>
  </section>
 
  <div class="start-actions">
-  <button class="btn primary full" id="startGameBtn">Spiel beginnen →</button>
-  <button class="btn full" id="resumeGameBtn">Laufendes Spiel fortsetzen</button>
-  <button class="btn ghost full" id="importBtn">Sicherung importieren</button>
-  <button class="btn ghost full" id="exportBtn">Spielstand sichern / exportieren</button>
+  <button class="btn primary full" id="startGameBtn" type="button">Spiel beginnen →</button>
+  <button class="btn full" id="resumeGameBtn" type="button">Laufendes Spiel fortsetzen</button>
+  <button class="btn ghost full" id="importBtn" type="button">Sicherung importieren</button>
+  <button class="btn ghost full" id="exportBtn" type="button">Spielstand sichern / exportieren</button>
   <input id="importFile" type="file" accept="application/json,.json" class="hidden">
  </div>
  <p class="note">Spielstände werden automatisch auf diesem Gerät gespeichert.</p>
@@ -200,8 +200,8 @@ tr:last-child td{border-bottom:0}
  </div>
 
  <div class="btn-row" style="margin-bottom:14px">
-  <button class="btn ghost" id="managePlayersBtn">＋ Spieler verwalten</button>
-  <button class="btn ghost" id="gameExportBtn">Sicherung exportieren</button>
+  <button class="btn ghost" id="managePlayersBtn" type="button">＋ Spieler verwalten</button>
+  <button class="btn ghost" id="gameExportBtn" type="button">Sicherung exportieren</button>
  </div>
 
  <div class="stats">
@@ -219,9 +219,9 @@ tr:last-child td{border-bottom:0}
   <div class="help">Tragt die Punkte entsprechend eurer Spielregel ein. Positive und negative Werte sind möglich. Wer später hinzukommt, wird nur ab der Einstiegsrunde gewertet.</div>
   <div id="editingNote" class="help hidden" style="color:var(--gold);margin-bottom:10px">Du bearbeitest eine bereits gespeicherte Runde.</div>
   <div class="btn-row" style="margin-top:14px">
-   <button class="btn primary" id="saveRoundBtn">Runde speichern</button>
-   <button class="btn ghost" id="clearRoundBtn">Eingaben leeren</button>
-   <button class="btn ghost hidden" id="cancelEditBtn">Abbrechen</button>
+   <button class="btn primary" id="saveRoundBtn" type="button">Runde speichern</button>
+   <button class="btn ghost" id="clearRoundBtn" type="button">Eingaben leeren</button>
+   <button class="btn ghost hidden" id="cancelEditBtn" type="button">Abbrechen</button>
   </div>
  </section>
 
@@ -234,14 +234,14 @@ tr:last-child td{border-bottom:0}
   <div class="section-head"><h3>Rundenverlauf</h3><span class="sub" id="historyCount">0 Runden</span></div>
   <div id="history"><div class="empty">Noch keine Runde gespeichert.</div></div>
   <div class="btn-row" style="margin-top:13px">
-   <button class="btn small ghost" id="undoBtn">Letzte Runde zurücknehmen</button>
+   <button class="btn small ghost" id="undoBtn" type="button">Letzte Runde zurücknehmen</button>
   </div>
  </section>
 
  <section class="section">
   <div class="section-head"><h3>Spielabschluss</h3></div>
   <p class="help" style="margin-top:0">Wenn ihr fertig seid, zeigt die App den Sieger und die Endplatzierungen an.</p>
-  <button class="btn primary full" id="winnerBtn">🏆 Spiel beenden und Sieger anzeigen</button>
+  <button class="btn primary full" id="winnerBtn" type="button">🏆 Spiel beenden und Sieger anzeigen</button>
  </section>
  <p class="note">Die Punkte werden laufend auf diesem Gerät gespeichert.</p>
 </section>
@@ -252,8 +252,8 @@ tr:last-child td{border-bottom:0}
   <h2 id="modalTitle">Bestätigen</h2>
   <p id="modalText"></p>
   <div class="btn-row">
-   <button class="btn" id="modalCancel">Abbrechen</button>
-   <button class="btn primary" id="modalConfirm">Bestätigen</button>
+   <button class="btn" id="modalCancel" type="button">Abbrechen</button>
+   <button class="btn primary" id="modalConfirm" type="button">Bestätigen</button>
   </div>
  </div>
 </div>
@@ -268,15 +268,15 @@ tr:last-child td{border-bottom:0}
   <div class="winner-box"><span>Gespielte Runden</span><strong id="winnerRounds">0</strong></div>
   <div id="winnerStandings"></div>
   <div class="winner-actions">
-   <button class="btn primary" id="continueBtn">Doch weiterspielen</button>
-   <button class="btn" id="finishBtn">Spiel endgültig beenden</button>
+   <button class="btn primary" id="continueBtn" type="button">Doch weiterspielen</button>
+   <button class="btn" id="finishBtn" type="button">Spiel endgültig beenden</button>
   </div>
  </div>
 </div>
 <div id="toast" class="toast hidden"></div>
 
 <script>
-(function(){
+document.addEventListener('DOMContentLoaded', function(){
 'use strict';
 
 const KEY='rummikub-score-v2';
@@ -342,9 +342,9 @@ function rememberName(name){
 function persist(){
  try{
   localStorage.setItem(KEY,JSON.stringify(state));
-  $('saveStatus').textContent='● Gespeichert';
+  if($('saveStatus'))$('saveStatus').textContent='● Gespeichert';
  }catch(e){
-  $('saveStatus').textContent='● Speicherfehler';
+  if($('saveStatus'))$('saveStatus').textContent='● Speicherfehler';
   toast('Speichern fehlgeschlagen. Bitte exportiere eine Sicherung.');
  }
 }
@@ -356,10 +356,12 @@ function esc(s){
 }
 
 function toast(message){
- $('toast').textContent=message;
- $('toast').classList.remove('hidden');
+ const t=$('toast');
+ if(!t)return;
+ t.textContent=message;
+ t.classList.remove('hidden');
  clearTimeout(toastTimer);
- toastTimer=setTimeout(()=>$('toast').classList.add('hidden'),2400);
+ toastTimer=setTimeout(()=>t.classList.add('hidden'),2400);
 }
 
 function totals(){
@@ -374,45 +376,60 @@ function totals(){
 }
 
 function showStart(){
- $('startView').classList.remove('hidden');$('gameView').classList.add('hidden');
+ if($('startView'))$('startView').classList.remove('hidden');
+ if($('gameView'))$('gameView').classList.add('hidden');
  renderStart();
 }
 
 function showGame(){
- $('startView').classList.add('hidden');$('gameView').classList.remove('hidden');
+ if($('startView'))$('startView').classList.add('hidden');
+ if($('gameView'))$('gameView').classList.remove('hidden');
  renderGame();
 }
 
 function renderStart(){
- $('startHeadline').textContent=state.started?'Spiel verwalten':'Wer spielt mit?';
- $('startGameBtn').textContent=state.started?'Zur laufenden Partie zurück →':'Spiel beginnen →';
- $('resumeGameBtn').classList.toggle('hidden',!state.started);$('playerList').innerHTML=state.players.map(p=>
-  `<div class="player-card"><strong>${esc(p.name)}${p.joinedAtRound>1?` <span class="sub">(ab Runde ${p.joinedAtRound})</span>`:''}</strong>
-  <button type="button" data-remove="${p.id}" aria-label="Spieler entfernen" ${state.rounds.length?'disabled':''}>×</button></div>`
- ).join('');
- $('emptyPlayers').classList.toggle('hidden',state.players.length>0);$('playerList').querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{
-  if(state.rounds.length)return toast('Nach Spielbeginn können Spieler nicht entfernt werden.');
-  state.players=state.players.filter(p=>p.id!==b.dataset.remove);
-  persist();renderStart();
- });
+ if($('startHeadline'))$('startHeadline').textContent=state.started?'Spiel verwalten':'Wer spielt mit?';
+ if($('startGameBtn'))$('startGameBtn').textContent=state.started?'Zur laufenden Partie zurück →':'Spiel beginnen →';
+ if($('resumeGameBtn'))$('resumeGameBtn').classList.toggle('hidden',!state.started);
+ 
+ const playerList=$('playerList');
+ if(playerList){
+  playerList.innerHTML=state.players.map(p=>
+   `<div class="player-card"><strong>${esc(p.name)}${p.joinedAtRound>1?` <span class="sub">(ab Runde ${p.joinedAtRound})</span>`:''}</strong>
+   <button type="button" data-remove="${p.id}" aria-label="Spieler entfernen" ${state.rounds.length?'disabled':''}>×</button></div>`
+  ).join('');
+  playerList.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{
+   if(state.rounds.length)return toast('Nach Spielbeginn können Spieler nicht entfernt werden.');
+   state.players=state.players.filter(p=>p.id!==b.dataset.remove);
+   persist();renderStart();
+  });
+ }
+ 
+ if($('emptyPlayers'))$('emptyPlayers').classList.toggle('hidden',state.players.length>0);
+
  const available=roster().filter(n=>!state.players.some(p=>p.name.toLowerCase()===n.toLowerCase()));
- $('savedRoster').innerHTML=available.map(n=>`<button class="roster-btn" data-name="${esc(n)}">＋ ${esc(n)}</button>`).join('');
- $('emptyRoster').classList.toggle('hidden',available.length>0);
- $('savedRoster').querySelectorAll('[data-name]').forEach(b=>b.onclick=()=>{$('playerName').value=b.dataset.name;
-  addPlayer();
- });
+ const savedRoster=$('savedRoster');
+ if(savedRoster){
+  savedRoster.innerHTML=available.map(n=>`<button class="roster-btn" type="button" data-name="${esc(n)}">＋ ${esc(n)}</button>`).join('');
+  savedRoster.querySelectorAll('[data-name]').forEach(b=>b.onclick=()=>{
+   if($('playerName'))$('playerName').value=b.dataset.name;
+   addPlayer();
+  });
+ }
+ if($('emptyRoster'))$('emptyRoster').classList.toggle('hidden',available.length>0);
 
  renderGameHistory();
 }
 
 function renderGameHistory(){
  const history=loadGameHistory();
- $('historyGamesCount').textContent=`${history.length} ${history.length===1?'Spiel':'Spiele'}`;
+ if($('historyGamesCount'))$('historyGamesCount').textContent=`${history.length} ${history.length===1?'Spiel':'Spiele'}`;
  const clearBtn=$('clearHistoryBtn');
  if(clearBtn) clearBtn.classList.toggle('hidden',history.length===0);
 
  if(!history.length){
-  $('hallOfFame').innerHTML='';$('gameHistoryList').innerHTML='<div class="empty">Noch keine beendeten Spiele gespeichert.</div>';
+  if($('hallOfFame'))$('hallOfFame').innerHTML='';
+  if($('gameHistoryList'))$('gameHistoryList').innerHTML='<div class="empty">Noch keine beendeten Spiele gespeichert.</div>';
   return;
  }
 
@@ -424,128 +441,157 @@ function renderGameHistory(){
  });
 
  const winEntries=Object.entries(winCounts).sort((a,b)=>b[1]-a[1]);
- $('hallOfFame').innerHTML=winEntries.map(([name,count])=>`
-  <div class="win-badge">🏆 ${esc(name)}: ${count}× Gewinner</div>
- `).join('');
+ if($('hallOfFame')){$('hallOfFame').innerHTML=winEntries.map(([name,count])=>`
+   <div class="win-badge">🏆 ${esc(name)}: ${count}× Gewinner</div>
+  `).join('');
+ }
 
- $('gameHistoryList').innerHTML=history.map((g,idx)=>`
-  <div class="game-archive-card">
-   <div class="game-archive-header" data-toggle-archive="${idx}">
-    <div>
-     <strong>Spiel #${g.gameNumber||(history.length-idx)} · Sieger: <span class="gold">${esc(g.winnerName)}</span></strong>
-     <div class="sub">${new Date(g.endedAt).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'})} Uhr · ${g.roundsCount} Runden</div>
-    </div>
-    <span class="pill">Details ▾</span>
-   </div>
-   <div class="game-archive-details hidden" id="archive-details-${idx}">
-    <div style="margin-bottom:8px;" class="sub">Endplatzierungen:</div>
-    ${(g.standings||[]).map((s,i)=>`
-     <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
-      <span>${i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}.`} ${esc(s.name)}</span>
-      <strong>${s.total>0?'+':''}${s.total} Punkte</strong>
+ const gameHistoryList=$('gameHistoryList');
+ if(gameHistoryList){
+  gameHistoryList.innerHTML=history.map((g,idx)=>`
+   <div class="game-archive-card">
+    <div class="game-archive-header" data-toggle-archive="${idx}">
+     <div>
+      <strong>Spiel #${g.gameNumber||(history.length-idx)} · Sieger: <span class="gold">${esc(g.winnerName)}</span></strong>
+      <div class="sub">${new Date(g.endedAt).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'})} Uhr · ${g.roundsCount} Runden</div>
      </div>
-    `).join('')}
-    <button class="btn small danger ghost" style="margin-top:10px" data-delete-archive="${idx}">Spiel aus Verlauf löschen</button>
+     <span class="pill">Details ▾</span>
+    </div>
+    <div class="game-archive-details hidden" id="archive-details-${idx}">
+     <div style="margin-bottom:8px;" class="sub">Endplatzierungen:</div>
+     ${(g.standings||[]).map((s,i)=>`
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
+       <span>${i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}.`} ${esc(s.name)}</span>
+       <strong>${s.total>0?'+':''}${s.total} Punkte</strong>
+      </div>
+     `).join('')}
+     <button class="btn small danger ghost" type="button" style="margin-top:10px" data-delete-archive="${idx}">Spiel aus Verlauf löschen</button>
+    </div>
    </div>
-  </div>
- `).join('');
+  `).join('');
 
- $('gameHistoryList').querySelectorAll('[data-toggle-archive]').forEach(el=>{
-  el.onclick=()=>{
-   const idx=el.dataset.toggleArchive;
-   $(`archive-details-${idx}`).classList.toggle('hidden');
-  };
- });
+  gameHistoryList.querySelectorAll('[data-toggle-archive]').forEach(el=>{
+   el.onclick=()=>{
+    const idx=el.dataset.toggleArchive;
+    const details=$(`archive-details-${idx}`);
+    if(details) details.classList.toggle('hidden');
+   };
+  });
 
- $('gameHistoryList').querySelectorAll('[data-delete-archive]').forEach(btn=>{
-  btn.onclick=(e)=>{
-   e.stopPropagation();
-   const idx=Number(btn.dataset.deleteArchive);
-   confirmAction('Spiel aus Verlauf löschen?','Möchtest du dieses abgelaufene Spiel wirklich löschen?','Löschen',()=>{
-    const h=loadGameHistory();
-    h.splice(idx,1);
-    saveGameHistory(h);
-    closeModal();
-    renderGameHistory();
-    toast('Spiel gelöscht');
-   });
-  };
- });
+  gameHistoryList.querySelectorAll('[data-delete-archive]').forEach(btn=>{
+   btn.onclick=(e)=>{
+    e.stopPropagation();
+    const idx=Number(btn.dataset.deleteArchive);
+    confirmAction('Spiel aus Verlauf löschen?','Möchtest du dieses abgelaufene Spiel wirklich löschen?','Löschen',()=>{
+     const h=loadGameHistory();
+     h.splice(idx,1);
+     saveGameHistory(h);
+     closeModal();
+     renderGameHistory();
+     toast('Spiel gelöscht');
+    });
+   };
+  });
+ }
 }
 
 function renderGame(){
  const sorted=totals();
- $('roundCount').textContent=state.rounds.length;
- $('playerCount').textContent=state.players.length;
- $('leaderScore').textContent=sorted.length?sorted[0].total:'—';
+ if($('roundCount'))$('roundCount').textContent=state.rounds.length;
+ if($('playerCount'))$('playerCount').textContent=state.players.length;
+ if($('leaderScore'))$('leaderScore').textContent=sorted.length?sorted[0].total:'—';
  const nextRound=state.rounds.length+1;
- $('gameEyebrow').textContent=`SPIEL ${state.gameNumber} · LAUFEND`;
- $('gameHeadline').textContent=editingRound>=0?`Runde ${editingRound+1} bearbeiten`:`Runde ${nextRound}`;
- $('gameSubheadline').textContent=editingRound>=0?'Korrigiere die gespeicherten Punkte.':'Tragt die Punkte ein und speichert die Runde.';
- $('roundTitle').textContent=editingRound>=0?'Runde bearbeiten':'Punkte dieser Runde';$('roundSub').textContent=editingRound>=0?'Die Rangliste wird danach aktualisiert.':'Für jeden Spieler Punkte eintragen';
- $('roundPill').textContent=`RUNDE ${editingRound>=0?editingRound+1:nextRound}`;
- $('editingNote').classList.toggle('hidden',editingRound<0);
- $('cancelEditBtn').classList.toggle('hidden',editingRound<0);$('saveRoundBtn').textContent=editingRound>=0?'Änderungen speichern':'Runde speichern';
+ if($('gameEyebrow'))$('gameEyebrow').textContent=`SPIEL ${state.gameNumber} · LAUFEND`;
+ if($('gameHeadline'))$('gameHeadline').textContent=editingRound>=0?`Runde ${editingRound+1} bearbeiten`:`Runde ${nextRound}`;
+ if($('gameSubheadline'))$('gameSubheadline').textContent=editingRound>=0?'Korrigiere die gespeicherten Punkte.':'Tragt die Punkte ein und speichert die Runde.';
+ if($('roundTitle'))$('roundTitle').textContent=editingRound>=0?'Runde bearbeiten':'Punkte dieser Runde';
+ if($('roundSub'))$('roundSub').textContent=editingRound>=0?'Die Rangliste wird danach aktualisiert.':'Für jeden Spieler Punkte eintragen';
+ if($('roundPill'))$('roundPill').textContent=`RUNDE ${editingRound>=0?editingRound+1:nextRound}`;
+ if($('editingNote'))$('editingNote').classList.toggle('hidden',editingRound<0);
+ if($('cancelEditBtn'))$('cancelEditBtn').classList.toggle('hidden',editingRound<0);
+ const saveRoundBtn=$('saveRoundBtn');
+ if(saveRoundBtn) saveRoundBtn.textContent=editingRound>=0?'Änderungen speichern':'Runde speichern';
 
- $('scoreInputs').innerHTML=state.players.map(p=>{
-  const old=editingRound>=0?state.rounds[editingRound].scores[p.id]:undefined;
-  const draft=state.draftScores[p.id];
-  const value=old!==undefined?old:(draft!==undefined?draft:'');
-  const unavailable=editingRound>=0&&p.joinedAtRound>editingRound+1;
-  return `<label class="score-row">
-   <span class="player-name">${esc(p.name)}${p.joinedAtRound>1?`<div class="sub">Einstieg ab Runde ${p.joinedAtRound}</div>`:''}</span>
-   <input class="score-input" type="number" inputmode="decimal" step="1" data-score="${p.id}" value="${value}" placeholder="0" aria-label="Punkte für ${esc(p.name)}" ${unavailable?'disabled':''}>
-  </label>`;
- }).join('')||'<div class="empty">Gehe zurück zur Spielverwaltung und füge mindestens zwei Spieler hinzu.</div>';
+ const scoreInputs=$('scoreInputs');
+ if(scoreInputs){
+  scoreInputs.innerHTML=state.players.map(p=>{
+   const old=editingRound>=0?state.rounds[editingRound].scores[p.id]:undefined;
+   const draft=state.draftScores[p.id];
+   const value=old!==undefined?old:(draft!==undefined?draft:'');
+   const unavailable=editingRound>=0&&p.joinedAtRound>editingRound+1;
+   return `<label class="score-row">
+    <span class="player-name">${esc(p.name)}${p.joinedAtRound>1?`<div class="sub">Einstieg ab Runde ${p.joinedAtRound}</div>`:''}</span>
+    <input class="score-input" type="number" inputmode="decimal" step="1" data-score="${p.id}" value="${value}" placeholder="0" aria-label="Punkte für ${esc(p.name)}" ${unavailable?'disabled':''}>
+   </label>`;
+  }).join('')||'<div class="empty">Gehe zurück zur Spielverwaltung und füge mindestens zwei Spieler hinzu.</div>';
 
- $('scoreInputs').querySelectorAll('[data-score]').forEach(input=>{
-  input.addEventListener('input',()=>{
-   state.draftScores[input.dataset.score]=input.value;
-   persist();
+  scoreInputs.querySelectorAll('[data-score]').forEach(input=>{
+   input.addEventListener('input',()=>{
+    state.draftScores[input.dataset.score]=input.value;
+    persist();
+   });
   });
- });
+ }
 
- $('saveRoundBtn').disabled=state.players.length<2;
- $('saveRoundBtn').style.opacity=$('saveRoundBtn').disabled?'.4':'1';
+ if(saveRoundBtn){
+  saveRoundBtn.disabled=state.players.length<2;
+  saveRoundBtn.style.opacity=saveRoundBtn.disabled?'.4':'1';
+ }
 
- $('leaderboard').innerHTML=sorted.length?`
-  <div class="table-wrap"><table>
-  <thead><tr><th>#</th><th>Spieler</th><th>Runden</th><th>Gesamt</th></tr></thead>
-  <tbody>${sorted.map((p,i)=>`<tr>
-   <td>${i===0?'★':i+1}</td>
-   <td>${esc(p.name)}${p.joinedAtRound>1?`<div class="sub">ab Runde ${p.joinedAtRound}</div>`:''}</td>
-   <td>${p.played}</td>
-   <td class="total ${i===0?'gold':''}">${p.total>0?'+':''}${p.total}</td>
-  </tr>`).join('')}</tbody></table></div>`:
-  '<div class="empty">Noch keine Spieler vorhanden.</div>';
+ const leaderboard=$('leaderboard');
+ if(leaderboard){
+  leaderboard.innerHTML=sorted.length?`
+   <div class="table-wrap"><table>
+   <thead><tr><th>#</th><th>Spieler</th><th>Runden</th><th>Gesamt</th></tr></thead>
+   <tbody>${sorted.map((p,i)=>`<tr>
+    <td>${i===0?'★':i+1}</td>
+    <td>${esc(p.name)}${p.joinedAtRound>1?`<div class="sub">ab Runde ${p.joinedAtRound}</div>`:''}</td>
+    <td>${p.played}</td>
+    <td class="total ${i===0?'gold':''}">${p.total>0?'+':''}${p.total}</td>
+   </tr>`).join('')}</tbody></table></div>`:
+   '<div class="empty">Noch keine Spieler vorhanden.</div>';
+ }
 
- $('historyCount').textContent=`${state.rounds.length} ${state.rounds.length===1?'Runde':'Runden'}`;
- $('history').innerHTML=state.rounds.length?[...state.rounds].map((r,i)=>({r,i})).reverse().map(({r,i})=>`
-  <div class="history-item">
-   <div>
-    <strong>Runde ${i+1}</strong>
-    <div class="sub" style="margin-top:4px">${new Date(r.date).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</div>
-    <button class="btn small ghost" style="margin-top:8px" data-edit="${i}">Bearbeiten</button>
-   </div>
-   <div class="history-scores">${state.players.map(p=>
-    Object.prototype.hasOwnProperty.call(r.scores,p.id)
-     ?`${esc(p.name)}: <b>${(Number(r.scores[p.id])\vert{}\vert{}0)>0?'+':''}${Number(r.scores[p.id])||0}</b>`
-     :`<span class="sub">${esc(p.name)}: noch nicht dabei</span>`
-   ).join('<br>')}</div>
-  </div>`).join(''):'<div class="empty">Noch keine Runde gespeichert.</div>';
+ if($('historyCount'))$('historyCount').textContent=`${state.rounds.length} ${state.rounds.length===1?'Runde':'Runden'}`;
+ const historyEl=$('history');
+ if(historyEl){
+  historyEl.innerHTML=state.rounds.length?[...state.rounds].map((r,i)=>({r,i})).reverse().map(({r,i})=>`
+   <div class="history-item">
+    <div>
+     <strong>Runde ${i+1}</strong>
+     <div class="sub" style="margin-top:4px">${new Date(r.date).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</div>
+     <button class="btn small ghost" type="button" style="margin-top:8px" data-edit="${i}">Bearbeiten</button>
+    </div>
+    <div class="history-scores">${state.players.map(p=>
+     Object.prototype.hasOwnProperty.call(r.scores,p.id)
+      ?`${esc(p.name)}: <b>${(Number(r.scores[p.id])\vert{}\vert{}0)>0?'+':''}${Number(r.scores[p.id])||0}</b>`
+      :`<span class="sub">${esc(p.name)}: noch nicht dabei</span>`
+    ).join('<br>')}</div>
+   </div>`).join(''):'<div class="empty">Noch keine Runde gespeichert.</div>';
 
- $('history').querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>{
-  editingRound=Number(b.dataset.edit);
-  state.draftScores={};
-  persist();renderGame();
-  $('roundSection').scrollIntoView({behavior:'smooth',block:'start'});
- });
- $('undoBtn').disabled=!state.rounds.length;
- $('undoBtn').style.opacity=$('undoBtn').disabled?'.4':'1';
+  historyEl.querySelectorAll('[data-edit]').forEach(b=>{
+   b.onclick=()=>{
+    editingRound=Number(b.dataset.edit);
+    state.draftScores={};
+    persist();
+    renderGame();
+    const roundSec=$('roundSection');
+    if(roundSec) roundSec.scrollIntoView({behavior:'smooth',block:'start'});
+   };
+  });
+ }
+
+ const undoBtn=$('undoBtn');
+ if(undoBtn){
+  undoBtn.disabled=!state.rounds.length;
+  undoBtn.style.opacity=undoBtn.disabled?'.4':'1';
+ }
 }
 
 function addPlayer(){
- const name=$('playerName').value.trim();
+ const playerNameInput=$('playerName');
+ if(!playerNameInput)return;
+ const name=playerNameInput.value.trim();
  if(!name)return toast('Bitte einen Namen eingeben.');
  if(state.players.some(p=>p.name.toLowerCase()===name.toLowerCase()))return toast('Dieser Spieler ist bereits eingetragen.');
  const joinedAtRound=state.rounds.length+1;
@@ -553,7 +599,7 @@ function addPlayer(){
  state.players.push({id,name,joinedAtRound});
  state.draftScores[id]='';
  rememberName(name);
- $('playerName').value='';
+ playerNameInput.value='';
  persist();
  renderStart();
  toast(joinedAtRound>1?`${name} steigt ab Runde ${joinedAtRound} ein`:`${name} hinzugefügt`);
@@ -609,15 +655,15 @@ function cancelEdit(){
 }
 
 function confirmAction(title,text,label,action){
- $('modalTitle').textContent=title;
- $('modalText').textContent=text;
- $('modalConfirm').textContent=label;
+ if($('modalTitle'))$('modalTitle').textContent=title;
+ if($('modalText'))$('modalText').textContent=text;
+ if($('modalConfirm'))$('modalConfirm').textContent=label;
  pendingAction=action;
- $('modal').classList.remove('hidden');
+ if($('modal'))$('modal').classList.remove('hidden');
 }
 
 function closeModal(){
- $('modal').classList.add('hidden');
+ if($('modal'))$('modal').classList.add('hidden');
  pendingAction=null;
 }
 
@@ -626,17 +672,18 @@ function showWinner(){
  if(!state.rounds.length)return toast('Speichere zuerst mindestens eine Runde.');
  const sorted=totals();
  const winner=sorted[0];
- $('winnerName').textContent=winner.name;
- $('winnerScore').textContent=`${winner.total>0?'+':''}${winner.total} Gesamtpunkte`;
- $('winnerRounds').textContent=state.rounds.length;
- $('winnerStandings').innerHTML=sorted.map((p,i)=>`
-  <div class="history-item">
-   <div><strong>${i+1}. ${esc(p.name)}</strong><div class="sub">${p.played} gewertete Runden</div></div>
-   <strong>${p.total>0?'+':''}${p.total} Punkte</strong>
-  </div>`).join('');
+ if($('winnerName'))$('winnerName').textContent=winner.name;
+ if($('winnerScore'))$('winnerScore').textContent=`${winner.total>0?'+':''}${winner.total} Gesamtpunkte`;
+ if($('winnerRounds'))$('winnerRounds').textContent=state.rounds.length;
+ if($('winnerStandings')){$('winnerStandings').innerHTML=sorted.map((p,i)=>`
+   <div class="history-item">
+    <div><strong>${i+1}. ${esc(p.name)}</strong><div class="sub">${p.played} gewertete Runden</div></div>
+    <strong>${p.total>0?'+':''}${p.total} Punkte</strong>
+   </div>`).join('');
+ }
  state.finished=true;
  persist();
- $('winnerScreen').classList.remove('hidden');
+ if($('winnerScreen'))$('winnerScreen').classList.remove('hidden');
 }
 
 function finishGame(){
@@ -657,7 +704,7 @@ function finishGame(){
  state=freshState(next);
  editingRound=-1;
  persist();
- $('winnerScreen').classList.add('hidden');
+ if($('winnerScreen'))$('winnerScreen').classList.add('hidden');
  closeModal();
  showStart();
  toast('Spiel im Verlauf gespeichert & neues Spiel vorbereitet.');
@@ -705,8 +752,8 @@ function importBackup(file){
  reader.readAsText(file);
 }
 
-const clearHistoryBtn = $('clearHistoryBtn');
-if (clearHistoryBtn) {
+const clearHistoryBtn=$('clearHistoryBtn');
+if(clearHistoryBtn){
  clearHistoryBtn.onclick=()=>{
   confirmAction('Gesamte Historie leeren?','Möchtest du wirklich alle aufgezeichneten vergangenen Spiele löschen?','Historie löschen',()=>{
    saveGameHistory([]);
@@ -717,53 +764,123 @@ if (clearHistoryBtn) {
  };
 }
 
-$('addPlayerBtn').onclick=addPlayer;
-$('playerName').addEventListener('keydown',e=>{if(e.key==='Enter')addPlayer();});
-$('startGameBtn').onclick=()=>{  if(state.started&&state.rounds.length){   showGame();  }else{   startGame();  } };$('resumeGameBtn').onclick=showGame;
+const addPlayerBtn=$('addPlayerBtn');
+if(addPlayerBtn){
+ addPlayerBtn.onclick=addPlayer;
+}
 
-$('managePlayersBtn').onclick=()=>{
- showStart();
- toast('Spieler hinzufügen oder Spiel fortsetzen');
-};
-$('gameExportBtn').onclick=exportBackup;
-$('saveRoundBtn').onclick=saveRound;
-$('clearRoundBtn').onclick=clearInputs;
-$('cancelEditBtn').onclick=cancelEdit;
-
-$('undoBtn').onclick=()=>{
- if(!state.rounds.length)return;
- confirmAction('Letzte Runde zurücknehmen?','Die zuletzt gespeicherte Runde wird gelöscht und die Rangliste neu berechnet.','Runde löschen',()=>{
-  state.rounds.pop();
-  editingRound=-1;
-  state.draftScores={};
-  persist();
-  closeModal();
-  renderGame();
-  toast('Letzte Runde entfernt');
+const playerNameInput=$('playerName');
+if(playerNameInput){
+ playerNameInput.addEventListener('keydown',e=>{
+  if(e.key==='Enter')addPlayer();
  });
-};
+}
 
-$('winnerBtn').onclick=showWinner;
-$('continueBtn').onclick=()=>{
- state.finished=false;
- persist();
- $('winnerScreen').classList.add('hidden');
- showGame();
- toast('Ihr könnt weiterspielen');
-};
-$('finishBtn').onclick=()=>{
- confirmAction('Spiel endgültig beenden?','Der aktuelle Spielstand wird abgeschlossen, im Verlauf gespeichert und für ein neues Spiel zurückgesetzt.','Spiel beenden',finishGame);
-};
+const startGameBtn=$('startGameBtn');
+if(startGameBtn){
+ startGameBtn.onclick=()=>{
+  if(state.started&&state.rounds.length){
+   showGame();
+  }else{
+   startGame();
+  }
+ };
+}
 
-$('exportBtn').onclick=exportBackup;
-$('importBtn').onclick=()=>$('importFile').click();
-$('importFile').onchange=e=>{  importBackup(e.target.files[0]);  e.target.value=''; };$('modalCancel').onclick=closeModal;
-$('modalConfirm').onclick=()=>{if(pendingAction)pendingAction();};
+const resumeGameBtn=$('resumeGameBtn');
+if(resumeGameBtn) resumeGameBtn.onclick=showGame;
+
+const managePlayersBtn=$('managePlayersBtn');
+if(managePlayersBtn){
+ managePlayersBtn.onclick=()=>{
+  showStart();
+  toast('Spieler hinzufügen oder Spiel fortsetzen');
+ };
+}
+
+const gameExportBtn=$('gameExportBtn');
+if(gameExportBtn) gameExportBtn.onclick=exportBackup;
+
+const saveRoundBtn=$('saveRoundBtn');
+if(saveRoundBtn) saveRoundBtn.onclick=saveRound;
+
+const clearRoundBtn=$('clearRoundBtn');
+if(clearRoundBtn) clearRoundBtn.clearInputs=clearInputs; // fallback
+if(clearRoundBtn) clearRoundBtn.onclick=clearInputs;
+
+const cancelEditBtn=$('cancelEditBtn');
+if(cancelEditBtn) cancelEditBtn.onclick=cancelEdit;
+
+const undoBtn=$('undoBtn');
+if(undoBtn){
+ undoBtn.onclick=()=>{
+  if(!state.rounds.length)return;
+  confirmAction('Letzte Runde zurücknehmen?','Die zuletzt gespeicherte Runde wird gelöscht und die Rangliste neu berechnet.','Runde löschen',()=>{
+   state.rounds.pop();
+   editingRound=-1;
+   state.draftScores={};
+   persist();
+   closeModal();
+   renderGame();
+   toast('Letzte Runde entfernt');
+  });
+ };
+}
+
+const winnerBtn=$('winnerBtn');
+if(winnerBtn) winnerBtn.onclick=showWinner;
+
+const continueBtn=$('continueBtn');
+if(continueBtn){
+ continueBtn.onclick=()=>{
+  state.finished=false;
+  persist();
+  if($('winnerScreen'))$('winnerScreen').classList.add('hidden');
+  showGame();
+  toast('Ihr könnt weiterspielen');
+ };
+}
+
+const finishBtn=$('finishBtn');
+if(finishBtn){
+ finishBtn.onclick=()=>{
+  confirmAction('Spiel endgültig beenden?','Der aktuelle Spielstand wird abgeschlossen, im Verlauf gespeichert und für ein neues Spiel zurückgesetzt.','Spiel beenden',finishGame);
+ };
+}
+
+const exportBtn=$('exportBtn');
+if(exportBtn) exportBtn.onclick=exportBackup;
+
+const importBtn=$('importBtn');
+if(importBtn){
+ importBtn.onclick=()=>{
+  const importFile=$('importFile');
+  if(importFile) importFile.click();
+ };
+}
+
+const importFile=$('importFile');
+if(importFile){
+ importFile.onchange=e=>{
+  importBackup(e.target.files[0]);
+  e.target.value='';
+ };
+}
+
+const modalCancel=$('modalCancel');
+if(modalCancel) modalCancel.onclick=closeModal;
+
+const modalConfirm=$('modalConfirm');
+if(modalConfirm){
+ modalConfirm.onclick=()=>{
+  if(pendingAction)pendingAction();
+ };
+}
 
 if(state.started&&!state.finished)showGame();
 else showStart();
 
-})();
+});
 </script>
 </body>
 </html>
