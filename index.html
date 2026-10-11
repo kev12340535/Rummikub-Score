@@ -549,7 +549,7 @@ function addPlayer(){
  if(!name)return toast('Bitte einen Namen eingeben.');
  if(state.players.some(p=>p.name.toLowerCase()===name.toLowerCase()))return toast('Dieser Spieler ist bereits eingetragen.');
  const joinedAtRound=state.rounds.length+1;
- const id=(crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random()));
+ const id='p_' + Date.now() + '_' + Math.floor(Math.random() * 1000000);
  state.players.push({id,name,joinedAtRound});
  state.draftScores[id]='';
  rememberName(name);
